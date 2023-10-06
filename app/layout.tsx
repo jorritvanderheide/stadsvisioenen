@@ -9,6 +9,7 @@
 // Related files:
 // -
 
+// Imports
 import { Metadata } from "next";
 import type { RootLayoutProps } from "@/types/global.t";
 import "@/styles/globals.css";
