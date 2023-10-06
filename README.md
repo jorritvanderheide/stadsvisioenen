@@ -1,7 +1,5 @@
 # Stadsvisioenen
 
-[![License](https://img.shields.io/badge/License-BSD%203--Clause-blue.svg)](https://opensource.org/licenses/BSD-3-Clause)
-
 ## About
 
 This repository contains the source code for the Stadsvisioenen project.
@@ -40,3 +38,7 @@ You can then visit [localhost:3000](http://localhost:3000) in the browser to vie
 [![Netlify Status](https://api.netlify.com/api/v1/badges/c8705438-ea92-4fc4-b496-c8f8ba8877c5/deploy-status)](https://app.netlify.com/sites/stadsvisioenen/deploys)
 
 To deploy the app, you can make a pull request to the `main` branch. When merged, this will trigger a Netlify deployment to [https://stadsvisioenen.nl](https://stadsvisioenen.nl).
+
+## License
+
+[![License](https://img.shields.io/badge/License-BSD%203--Clause-blue.svg)](https://opensource.org/licenses/BSD-3-Clause)
