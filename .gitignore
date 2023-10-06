@@ -9,6 +9,7 @@
 
 # Local .env files
 .env*.local
+.env
 
 # Typescript
 next-env.d.ts
