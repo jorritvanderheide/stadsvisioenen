@@ -7,6 +7,7 @@
 // Related files:
 // -
 
+// Imports
 import type { RootLayoutProps } from "@/types/global.t";
 import "@/styles/globals.css";
 
