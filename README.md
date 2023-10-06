@@ -1,5 +1,7 @@
 # Stadsvisioenen
 
+[![License](https://img.shields.io/badge/License-BSD%203--Clause-blue.svg)](https://opensource.org/licenses/BSD-3-Clause)
+
 ## About
 
 This repository contains the source code for the Stadsvisioenen project.
