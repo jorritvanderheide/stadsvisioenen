@@ -1,7 +1,19 @@
+// RootLayout: The root layout component for the application, which is used to wrap all pages.
+
+// Key features:
+// - Provides a consistent layout for all pages.
+// - Renders the <html> and <body> tags.
+// - Adds global styles.
+// - Sets global metadata.
+
+// Related files:
+// -
+
 import { Metadata } from "next";
 import type { RootLayoutProps } from "@/types/global.t";
 import "@/styles/globals.css";
 
+// Metadata for all pages
 export const metadata: Metadata = {
   applicationName: "Stadsvisioenen",
   title: "Stadsvisioenen",
@@ -34,6 +46,7 @@ export const metadata: Metadata = {
   },
 };
 
+// Export default
 const RootLayout: React.FC<RootLayoutProps> = ({ children }) => {
   return (
     <html lang="nl">

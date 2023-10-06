@@ -1,3 +1,6 @@
+// Tailwind CSS configuration file for Next.js
+// https://nextjs.org/docs/app/building-your-application/styling/tailwind-css#configuring-tailwind
+
 import type { Config } from "tailwindcss";
 
 const config: Config = {
@@ -7,4 +10,5 @@ const config: Config = {
   },
   plugins: [],
 };
+
 export default config;
