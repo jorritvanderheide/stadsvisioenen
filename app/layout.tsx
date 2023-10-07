@@ -5,9 +5,10 @@
 // - Renders the <html> and <body> tags.
 
 // Related files:
-// -
+// - /components/AuthProvider.tsx (provides the user session to the app)
 
 // Imports
+import AuthProvider from "@/components/providers/AuthProvider";
 import type { RootLayoutProps } from "@/types/global.t";
 import "@/styles/globals.css";
 
@@ -15,7 +16,9 @@ import "@/styles/globals.css";
 const RootLayout: React.FC<RootLayoutProps> = ({ children }) => {
   return (
     <html lang="nl">
-      <body>{children}</body>
+      <AuthProvider>
+        <body>{children}</body>
+      </AuthProvider>
     </html>
   );
 };
