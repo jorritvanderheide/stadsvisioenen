@@ -13,3 +13,6 @@
 
 # Typescript
 next-env.d.ts
+
+# Visual Studio Code
+.vscode/*
