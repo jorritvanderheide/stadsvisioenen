@@ -48,6 +48,7 @@ model User {
   image         String?
   accounts      Account[]
   sessions      Session[]
+  Stories       Story[]
 
   @@map("users")
 }
@@ -59,4 +60,16 @@ model VerificationToken {
 
   @@unique([identifier, token])
   @@map("verificationtokens")
+}
+
+model Story {
+  id        String  @id @default(cuid())
+  user      User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId    String  @map("user_id")
+  title     String
+  content   String?
+  image     String?
+  longitude Float?
+  latitude  Float?
+  published Boolean @default(false)
 }
