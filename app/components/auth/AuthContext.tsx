@@ -7,7 +7,7 @@
 
 // Imports
 import { SessionProvider } from "next-auth/react";
-import type { AuthContextProps } from "@/types/global.t";
+import type { AuthContextProps } from "@/app/types/global.t";
 
 // Export default
 const AuthContext: React.FC<AuthContextProps> = ({ children }) => {

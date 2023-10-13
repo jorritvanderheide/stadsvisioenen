@@ -4,3 +4,8 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* Style map markers */
+img[src$="#custom_marker"] {
+  @apply rounded-full !border-[0.35em] !border-solid !border-white;
+}

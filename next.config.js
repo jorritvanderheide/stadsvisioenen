@@ -2,6 +2,17 @@
 // https://nextjs.org/docs/pages/api-reference/next-config-js
 
 /** @type {import('next').NextConfig} */
-const nextConfig = {};
+const nextConfig = {
+  images: {
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "nmnoqrfgzanqrvovnqtp.supabase.co",
+        port: "",
+        pathname: "/**",
+      },
+    ],
+  },
+};
 
 module.exports = nextConfig;
