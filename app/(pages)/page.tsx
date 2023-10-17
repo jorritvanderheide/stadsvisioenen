@@ -7,6 +7,7 @@
 // Imports
 import { NextPage } from "next";
 import Map from "@/app/components/maps/Map";
+import { StoryProps } from "@/app/types/global.t";
 
 //
 async function getStories() {
@@ -25,7 +26,7 @@ async function getStories() {
 
 // Export default
 const Home: NextPage = async () => {
-  const stories = await getStories();
+  const stories: StoryProps[] = await getStories();
 
   return (
     <main className="h-[calc(100svh_-_5em)] w-full overflow-hidden">

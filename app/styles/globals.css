@@ -9,3 +9,8 @@
 img[src$="#custom_marker"] {
   @apply rounded-full !border-[0.35em] !border-solid !border-white;
 }
+
+/* Fill material symbols */
+.filled {
+  font-variation-settings: "FILL" 1;
+}

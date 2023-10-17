@@ -5,9 +5,11 @@
 
 // Imports
 import Link from "next/dist/client/link";
-import Image from "next/image";
 import { getServerSession } from "next-auth/next";
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
+import StorySection from "@/app/components/sections/StorySection";
+import RatingSection from "@/app/components/sections/RatingSection";
+import CommentsSection from "@/app/components/sections/CommentsSection";
 import type { StoryProps, SessionProps } from "@/app/types/global.t";
 
 // Generate static paths for all stories
@@ -46,20 +48,23 @@ const Read = async ({ params }: { params: { id: string } }) => {
 
   return (
     <main>
-      <Link href="/">
-        <span className="material-symbols-rounded">arrow_back</span>
-      </Link>
-      {session?.user?.id === story.userId && (
-        <Link href={`/write?id=${story.id}`}>Edit</Link>
-      )}
-      <h1>{story.title}</h1>
-      <Image
-        src={story.imageUrl.toString()}
-        width={1024}
-        height={1024}
-        alt="title"
-      />
-      <div dangerouslySetInnerHTML={{ __html: story.content }} />
+      <section id="buttons">
+        <Link href="/">
+          <span className="material-symbols-rounded">arrow_back</span>
+        </Link>
+        {session?.user?.id === story.userId && (
+          <Link href={`/write?id=${story.id}`}>Edit</Link>
+        )}
+      </section>
+
+      {/* Story */}
+      <StorySection {...story} />
+
+      {/* Ratings */}
+      {session && <RatingSection id={params.id} />}
+
+      {/* Comments */}
+      <CommentsSection id={params.id} />
     </main>
   );
 };

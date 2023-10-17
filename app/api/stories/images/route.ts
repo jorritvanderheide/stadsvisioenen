@@ -1,10 +1,18 @@
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 import type { NextAuthOptions } from "next-auth";
+import type { SessionProps } from "@/app/types/global.t";
 
-// Handle post request
-export const POST = async (request: Request) => {
-  const session = await getServerSession(authOptions as NextAuthOptions);
+/**
+ * Handle post request
+ * @param {string} request.prompt - Prompt string to generate image
+ *
+ * @returns {Promise<Response>} - Image base64 string
+ */
+export const POST = async (request: Request): Promise<Response> => {
+  const session: SessionProps | null = await getServerSession(
+    authOptions as NextAuthOptions
+  );
 
   if (!session) {
     return Response.json({ error: "You must be signed in to generate images" });

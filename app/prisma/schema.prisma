@@ -49,8 +49,8 @@ model User {
   accounts      Account[]
   sessions      Session[]
   stories       Story[]
-  Rating        Rating[]
-  Comment       Comment[]
+  ratings       Rating[]
+  comments      Comment[]
 
   @@map("users")
 }
@@ -86,7 +86,7 @@ model Story {
 model Rating {
   id        String   @id @default(cuid())
   user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId    String   @map("user_id")
+  userId    String   @unique @map("user_id")
   story     Story    @relation(fields: [storyId], references: [id], onDelete: Cascade)
   storyId   String   @map("story_id")
   rating    Int

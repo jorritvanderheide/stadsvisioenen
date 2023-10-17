@@ -1,3 +1,5 @@
+// Map component
+
 "use client";
 
 import { useMemo, useState, useRef } from "react";
@@ -30,7 +32,7 @@ const Map = ({ stories }: { stories: StoryProps[] }) => {
     googleMapsApiKey: process.env.NEXT_PUBLIC_GOOGLE_MAPS_KEY!,
   });
 
-  // When the user clicks on the map
+  // Handle map click events
   const onMapClick = (event: any) => {
     if (!session) return;
     setTempMarker({
@@ -55,10 +57,10 @@ const Map = ({ stories }: { stories: StoryProps[] }) => {
             lng: Number(marker.longitude),
           }}
           onClick={() => router.push(`/read/${marker.id}`)}
-          //   icon={{
-          //     url: `${marker.imageUrl}#custom_marker`,
-          //     scaledSize: new window.google.maps.Size(65, 65),
-          //   }}
+          icon={{
+            url: `${marker.imageUrl}#custom_marker`,
+            scaledSize: new window.google.maps.Size(65, 65),
+          }}
         />
       ))}
       {tempMarker !== undefined && (
