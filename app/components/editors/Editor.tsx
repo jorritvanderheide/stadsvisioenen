@@ -12,6 +12,7 @@ import React, { useState } from "react";
 import Image from "next/image";
 import dynamic from "next/dynamic";
 import { useRouter, useSearchParams } from "next/navigation";
+import { profanity } from "@2toad/profanity";
 import { createId } from "@paralleldrive/cuid2";
 import { supabase } from "@/app/lib/supabase/supabase";
 import { decode } from "base64-arraybuffer";
@@ -54,9 +55,18 @@ const Editor: React.FC = () => {
     setStory(data);
   };
 
+  // Check for profanity
+  const checkProfanity = () => {
+    if (profanity.exists(title) || profanity.exists(content)) {
+      return true;
+    } else {
+      return false;
+    }
+  };
+
   // Upload image to supabase
   const uploadImage = async (image: string) => {
-    const filename = `public/test.webp`;
+    const filename = `public/${id}.webp`;
     const { data, error } = await supabase.storage
       .from("story-covers")
       .upload(filename, decode(image), {
@@ -102,6 +112,11 @@ const Editor: React.FC = () => {
 
   // Handle post request for a new story
   const handlePost = async () => {
+    // Check for profanity
+    if (checkProfanity()) {
+      throw new Error("Profanity detected");
+    }
+
     const res = await fetch(`${process.env.NEXT_PUBLIC_FETCH_URL}/stories`, {
       method: "POST",
       body: JSON.stringify({
@@ -126,6 +141,11 @@ const Editor: React.FC = () => {
 
   // Handle put request for an existing story
   const handlePut = async () => {
+    // Check for profanity
+    if (checkProfanity()) {
+      throw new Error("Profanity detected");
+    }
+
     const res = await fetch(`${process.env.NEXT_PUBLIC_FETCH_URL}/stories`, {
       method: "PUT",
       body: JSON.stringify({

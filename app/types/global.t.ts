@@ -17,7 +17,7 @@ export interface RootLayoutProps {
 // Stories
 export interface StoryProps {
   id: string;
-  user?: {
+  user: {
     name: string;
   };
   userId: string;
@@ -36,7 +36,7 @@ export interface StorySectionProps {
   title: string;
   content: string;
   imageUrl: string;
-  user?: {
+  user: {
     name: string;
   };
 }

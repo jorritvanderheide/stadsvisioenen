@@ -56,12 +56,13 @@ export const POST = async (request: NextRequest): Promise<Response> => {
     return Response.json({ error: "You must be signed in to create stories" });
   }
 
-  const { title, content, imageUrl, longitude, latitude, published } =
+  const { id, title, content, imageUrl, longitude, latitude, published } =
     await request.json();
 
   try {
-    const res: StoryProps = await prisma.story.create({
+    const res = await prisma.story.create({
       data: {
+        id: id,
         user: { connect: { email: session!.user!.email! } },
         title: title,
         content: content,
@@ -100,7 +101,7 @@ export const PUT = async (request: NextRequest): Promise<Response> => {
   const { id, title, content, imageUrl, published } = await request.json();
 
   try {
-    const res: StoryProps = await prisma.story.update({
+    const res = await prisma.story.update({
       where: {
         id: id,
         user: {
