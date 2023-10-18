@@ -14,3 +14,16 @@ img[src$="#custom_marker"] {
 .filled {
   font-variation-settings: "FILL" 1;
 }
+
+/* Story content */
+#story-content h1 {
+  @apply text-h2 w-full font-bold !mb-[0.5em];
+}
+
+#story-content h2 {
+  @apply text-h3 w-full font-semibold !mb-[0.5em];
+}
+
+#story-content h3 {
+  @apply text-body w-full italic !mb-[0.5em];
+}

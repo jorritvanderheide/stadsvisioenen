@@ -4,9 +4,9 @@
 // - Read a story
 
 // Imports
-import Link from "next/dist/client/link";
 import { getServerSession } from "next-auth/next";
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
+import StoryControls from "@/app/components/buttons/StoryControls";
 import StorySection from "@/app/components/sections/StorySection";
 import RatingSection from "@/app/components/sections/RatingSection";
 import CommentsSection from "@/app/components/sections/CommentsSection";
@@ -31,6 +31,7 @@ async function getStory(id: string) {
     {
       method: "GET",
       headers: { "Content-Type": "application/json" },
+      cache: "no-cache",
     }
   );
 
@@ -48,23 +49,17 @@ const Read = async ({ params }: { params: { id: string } }) => {
 
   return (
     <main>
-      <section id="buttons">
-        <Link href="/">
-          <span className="material-symbols-rounded">arrow_back</span>
-        </Link>
-        {session?.user?.id === story.userId && (
-          <Link href={`/write?id=${story.id}`}>Edit</Link>
-        )}
-      </section>
+      {/* Story controls */}
+      <StoryControls id={params.id} story={story} />
 
       {/* Story */}
       <StorySection {...story} />
 
       {/* Ratings */}
-      {session && <RatingSection id={params.id} />}
+      {session && <RatingSection id={params.id} imageUrl={story.imageUrl} />}
 
       {/* Comments */}
-      <CommentsSection id={params.id} />
+      <CommentsSection id={params.id} imageUrl={story.imageUrl} />
     </main>
   );
 };

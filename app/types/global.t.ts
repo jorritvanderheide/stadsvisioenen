@@ -1,7 +1,7 @@
 // Global types library
 // https://www.typescriptlang.org/docs/handbook/declaration-files/templates/global-d-ts.html
 
-import React from "react";
+import { ButtonHTMLAttributes } from "react";
 
 // Auth context
 export interface AuthContextProps {
@@ -29,6 +29,7 @@ export interface StoryProps {
   createdAt: Date;
   updatedAt: Date;
   rating?: number | null;
+  version: number;
 }
 
 // StorySection
@@ -84,4 +85,20 @@ export interface CommentProps {
     name: string;
     image: string;
   };
+}
+
+// AnimatedLink
+export interface AnimatedLinkProps {
+  children: React.ReactNode;
+  className?: string;
+  scale?: number;
+  noY?: boolean;
+}
+
+// Buttons
+export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
+  children: React.ReactNode;
+  onClick?: (e?: any) => void;
+  className?: string;
+  noY?: boolean;
 }

@@ -14,9 +14,13 @@ import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 const Write: NextPage = async () => {
   const session = await getServerSession(authOptions);
 
+  if (!session) {
+    return null;
+  }
+
   return (
     <main>
-      {session ? <Editor /> : <p>You must be logged in to write a story.</p>}
+      <Editor />
     </main>
   );
 };

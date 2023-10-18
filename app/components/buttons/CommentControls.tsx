@@ -2,10 +2,13 @@
 
 "use client";
 
+import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
+import AnimatedLink from "@/app/components/buttons/AnimatedLink";
 
 const CommentControls: React.FC<{ id: string }> = ({ id }) => {
   const { data: session } = useSession();
+  const router = useRouter();
 
   // TODO - handle edit
   const handleEdit = () => {};
@@ -16,24 +19,36 @@ const CommentControls: React.FC<{ id: string }> = ({ id }) => {
       return;
     }
 
-    const res = await fetch(
-      `${process.env.NEXT_PUBLIC_FETCH_URL}/stories/comments?id=${id}`,
-      {
-        method: "DELETE",
-        headers: { "Content-Type": "application/json" },
-      }
+    const confirm = window.confirm(
+      "Are you sure you want to delete this comment?"
     );
-    if (!res.ok) {
-      throw new Error("Failed to fetch data");
-    }
 
-    return res.json();
+    if (confirm) {
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_FETCH_URL}/stories/comments?id=${id}`,
+        {
+          method: "DELETE",
+          headers: { "Content-Type": "application/json" },
+        }
+      );
+      if (!res.ok) {
+        throw new Error("Failed to fetch data");
+      } else {
+        router.refresh();
+      }
+    } else {
+      return;
+    }
   };
 
   return (
     <div>
       {/* <button onClick={handleEdit}>Edit</button> */}
-      <button onClick={handleDelete}>Delete</button>
+      <AnimatedLink>
+        <button onClick={handleDelete}>
+          <span className="material-symbols-rounded text-gray">delete</span>
+        </button>
+      </AnimatedLink>
     </div>
   );
 };

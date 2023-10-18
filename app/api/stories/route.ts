@@ -69,7 +69,6 @@ export const POST = async (request: NextRequest): Promise<Response> => {
         imageUrl: imageUrl,
         longitude: longitude,
         latitude: latitude,
-        published: published,
       },
     });
 
@@ -112,7 +111,9 @@ export const PUT = async (request: NextRequest): Promise<Response> => {
         title: title,
         content: content,
         imageUrl: imageUrl,
-        published: published,
+        version: {
+          increment: 1,
+        },
       },
     });
 

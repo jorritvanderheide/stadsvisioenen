@@ -29,9 +29,10 @@ export const GET = async (request: NextRequest): Promise<Response> => {
         },
       });
 
-      const rating = res[0] ? res[0].rating : 0;
+      const ratingId = res[0] ? res[0].id : null;
+      const ratingValue = res[0] ? res[0].rating : 0;
 
-      return Response.json(rating);
+      return Response.json({ ratingId, ratingValue });
     } catch (error) {
       return Response.json(error);
     }
@@ -77,7 +78,7 @@ export const POST = async (request: NextRequest): Promise<Response> => {
 
 /**
  * Handle put request
- * @param {string} searchParams.id - Story id
+ * @param {string} searchParams.id - Rating id
  * @param {integer} request.title - Rating value
  *
  * @returns {Promise<Response>} - Response object
@@ -98,7 +99,7 @@ export const PUT = async (request: NextRequest): Promise<Response> => {
 
   try {
     const res = await prisma.rating.update({
-      where: { storyId: id, userId: session!.user!.id! },
+      where: { id: id },
       data: {
         rating: rating,
       },

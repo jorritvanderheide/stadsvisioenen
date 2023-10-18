@@ -10,7 +10,6 @@
 // Imports
 import AuthContext from "@/app/components/auth/AuthContext";
 import type { RootLayoutProps } from "@/app/types/global.t";
-import Header from "@/app/components/bars/Header";
 import "material-symbols";
 import "@/app/styles/globals.css";
 
@@ -19,10 +18,7 @@ const RootLayout: React.FC<RootLayoutProps> = ({ children }) => {
   return (
     <html lang="nl">
       <AuthContext>
-        <body>
-          <Header />
-          <div className="mt-[5em]">{children}</div>
-        </body>
+        <body>{children}</body>
       </AuthContext>
     </html>
   );

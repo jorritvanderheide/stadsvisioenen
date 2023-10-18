@@ -6,6 +6,7 @@
 
 // Imports
 import { NextPage } from "next";
+import Header from "@/app/components/bars/Header";
 import Map from "@/app/components/maps/Map";
 import { StoryProps } from "@/app/types/global.t";
 
@@ -29,9 +30,12 @@ const Home: NextPage = async () => {
   const stories: StoryProps[] = await getStories();
 
   return (
-    <main className="h-[calc(100svh_-_5em)] w-full overflow-hidden">
-      <Map stories={stories} />
-    </main>
+    <>
+      <main className="h-[100svh] w-full overflow-hidden">
+        <Header />
+        <Map stories={stories} />
+      </main>
+    </>
   );
 };
 

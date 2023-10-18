@@ -41,20 +41,27 @@ const CommentCard: React.FC<CommentProps> = async (comment) => {
 
   return (
     <article className="comment">
-      <header>
-        <h3>{comment.user.name}</h3>
-        <p>{`${timeSince(new Date(comment.createdAt))} ago`}</p>
-      </header>
-      <Image
-        src={comment.user.image}
-        width={460}
-        height={460}
-        alt={`Profile image for ${comment.user.name}`}
-      />
-      <p>{comment.content}</p>
-      {session && session!.user!.id === comment.userId && (
-        <CommentControls id={comment.id} />
-      )}
+      <div className="flex gap-[2.5em] w-prose">
+        <Image
+          className="w-[4em] h-[4em] rounded-full"
+          src={comment.user.image}
+          width={460}
+          height={460}
+          alt={`Profile image for ${comment.user.name}`}
+        />
+        <div className="mt-[0.75em] flex flex-col gap-[1em] text-body w-full">
+          <div className="flex justify-between items-center">
+            <header>
+              <h3 className="text-h3 font-semibold">{comment.user.name}</h3>
+              <p>{`${timeSince(new Date(comment.createdAt))} ago`}</p>
+            </header>
+            {session && session!.user!.id === comment.userId && (
+              <CommentControls id={comment.id} />
+            )}
+          </div>
+          <p>{comment.content}</p>
+        </div>
+      </div>
     </article>
   );
 };
