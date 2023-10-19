@@ -5,10 +5,11 @@
 // - List of nearby stories
 
 // Imports
-import { NextPage } from "next";
+
 import Header from "@/app/components/bars/Header";
 import Map from "@/app/components/maps/Map";
 import { StoryProps } from "@/app/types/global.t";
+import { NextPage } from "next";
 
 //
 async function getStories() {

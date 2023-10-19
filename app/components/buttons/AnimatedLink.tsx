@@ -1,11 +1,10 @@
-// AnimatedLink component
-
 "use client";
 
 import { FunctionComponent } from "react";
 import { motion } from "framer-motion";
 import type { AnimatedLinkProps } from "@/app/types/global.t";
 
+// AnimatedLink component
 const AnimatedLink: FunctionComponent<AnimatedLinkProps> = ({
   children,
   className,
@@ -23,8 +22,7 @@ const AnimatedLink: FunctionComponent<AnimatedLinkProps> = ({
         transition: { duration: 0.4 },
         y: yValue,
       }}
-      whileTap={{ scale: 0.95, y: yValue + 1 }}
-    >
+      whileTap={{ scale: 0.95, y: yValue + 1 }}>
       {children}
     </motion.div>
   );

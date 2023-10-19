@@ -5,7 +5,7 @@
 import { useMemo, useState, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
-import { AnimatePresence, motion } from "framer-motion";
+import { AnimatePresence, delay, motion } from "framer-motion";
 import { useLoadScript, GoogleMap, MarkerF } from "@react-google-maps/api";
 import { StoryProps, TempMarkerProps } from "@/app/types/global.t";
 import Button from "@/app/components/buttons/Button";
@@ -39,7 +39,7 @@ const Map = ({ stories }: { stories: StoryProps[] }) => {
       mapTypeId: "satellite",
       gestureHandling: "greedy",
     }),
-    [],
+    []
   );
 
   // Load the Google Maps API
@@ -75,7 +75,7 @@ const Map = ({ stories }: { stories: StoryProps[] }) => {
   // Variants for animation
   const mapVariants = {
     full: { height: "100vh" },
-    shared: { height: "33vh" },
+    shared: { height: "40vh" },
   };
   const creationVariants = {
     hidden: { display: "none", marginTop: "0" },
@@ -97,11 +97,16 @@ const Map = ({ stories }: { stories: StoryProps[] }) => {
   const handleDirection = async (e: any) => {
     e.preventDefault();
 
+    setIsGeneratingHelp(true);
+
+    await new Promise((resolve) => setTimeout(resolve, 2000));
+
     setDirection(
-      "A paragraph is defined as “a group of sentences or a single sentence that forms a unit” (Lunsford and Connors 116). Length and appearance do not determine whether a section in a paper is a paragraph. For instance, in some styles of writing, particularly journalistic styles, a paragraph can be just one sentence long.",
+      "A paragraph is defined as “a group of sentences or a single sentence that forms a unit” (Lunsford and Connors 116). Length and appearance do not determine whether a section in a paper is a paragraph. For instance, in some styles of writing, particularly journalistic styles, a paragraph can be just one sentence long."
     );
 
     // Generate a direction
+    setIsGeneratingHelp(false);
   };
 
   // Handle assistance for topic
@@ -111,7 +116,9 @@ const Map = ({ stories }: { stories: StoryProps[] }) => {
     setIsGeneratingHelp(true);
     // Generate a story idea
 
-    // Set the sotry idea to the textbox
+    await new Promise((resolve) => setTimeout(resolve, 2000));
+
+    // Set the story idea to the textbox
     setIsGeneratingHelp(false);
   };
 
@@ -121,8 +128,7 @@ const Map = ({ stories }: { stories: StoryProps[] }) => {
         className="relative z-0 w-full"
         initial="full"
         animate={isCreating ? "shared" : "full"}
-        variants={mapVariants}
-      >
+        variants={mapVariants}>
         <GoogleMap
           ref={ref}
           options={mapOptions}
@@ -130,8 +136,7 @@ const Map = ({ stories }: { stories: StoryProps[] }) => {
           center={mapCenter}
           mapContainerStyle={{ width: "100%", height: "100%" }}
           onClick={(e) => newStory(e)}
-          onLoad={(map) => setMap(map as unknown as GoogleMap)}
-        >
+          onLoad={(map) => setMap(map as unknown as GoogleMap)}>
           {stories?.map((marker) => (
             <MarkerF
               key={marker.id}
@@ -161,10 +166,10 @@ const Map = ({ stories }: { stories: StoryProps[] }) => {
         </GoogleMap>
         {!isCreating && (
           <div className="absolute bottom-[5em] left-0 flex w-full justify-center">
-            <p className="text-h3 font-bold text-white">
+            <p className="text-h3 font-bold text-white drop-shadow-xl">
               {!session
                 ? "Log in to start envisioning the future"
-                : "Start envisioning the future by clicking on a location you want to reenvision."}
+                : "Start envisioning the future by clicking on a location you want to reenvision"}
             </p>
           </div>
         )}
@@ -174,8 +179,7 @@ const Map = ({ stories }: { stories: StoryProps[] }) => {
           className="absolute z-[20] w-full rounded-t-[2em] bg-white p-[7.5vh]"
           variants={creationVariants}
           initial="hidden"
-          animate={isCreating ? "visible" : "hidden"}
-        >
+          animate={isCreating ? "visible" : "hidden"}>
           <div className="relative flex flex-col items-center gap-[5em]">
             {/* Close icon */}
             <div className="absolute left-0 top-0">
@@ -194,7 +198,10 @@ const Map = ({ stories }: { stories: StoryProps[] }) => {
               </p>
             </div>
 
-            <div className="flex w-prose flex-col items-center gap-[5em]">
+            <div
+              className={`flex w-prose flex-col items-center gap-[2.5em] ${
+                topic !== "" ? "gap-[5em]" : "gap-[2.5em]"
+              }`}>
               {/* Topic bar */}
               <div className="flex flex-col items-center gap-[2.5em]">
                 <h2 className="text-h2 font-bold">
@@ -208,8 +215,7 @@ const Map = ({ stories }: { stories: StoryProps[] }) => {
                       topic === "hasTopic"
                         ? "bg-gray-dark text-white"
                         : "bg-gray"
-                    }`}
-                  >
+                    }`}>
                     Yes I do!
                   </Button>
                   <Button
@@ -219,8 +225,7 @@ const Map = ({ stories }: { stories: StoryProps[] }) => {
                       topic === "hasDirection"
                         ? "bg-gray-dark text-white"
                         : "bg-gray"
-                    }`}
-                  >
+                    }`}>
                     Only a direction
                   </Button>
                   <Button
@@ -230,15 +235,14 @@ const Map = ({ stories }: { stories: StoryProps[] }) => {
                       topic === "needsHelp"
                         ? "bg-gray-dark text-white"
                         : "bg-gray"
-                    }`}
-                  >
+                    }`}>
                     Help me choose
                   </Button>
                 </div>
               </div>
 
               {/* Topic pane */}
-              <div className="-mt-[1em]">
+              <div className="-mt-[1em] w-full">
                 {topic === "hasTopic" ? (
                   <div className="mb-[2.5em] flex w-full justify-center">
                     <p className="text-body italic">
@@ -247,23 +251,27 @@ const Map = ({ stories }: { stories: StoryProps[] }) => {
                   </div>
                 ) : // Has direction
                 topic === "hasDirection" ? (
-                  <div className="flex flex-col items-center gap-[2.5em]">
+                  <div className="flex w-full flex-col items-center gap-[2.5em]">
                     <p className="text-body italic">
                       What direction are you thinking of? Maybe I can help!
                     </p>
                     <div className="flex w-full items-center justify-between gap-[1em]">
                       <input
-                        className="border-dark-gray w-full border-b-2 p-[1em] outline-none"
+                        className="w-full rounded-md border border-gray p-[1em]"
                         value={directionValue}
                         onChange={(e) => setDirectionValue(e.target.value)}
-                        placeholder="What are your ideas?"
+                        placeholder="Describe a topic for your vision for the future"
                         name="direction"
                       />
                       <Button
                         className="flex h-[3em] w-[3em] items-center justify-center !rounded-full bg-gray-dark text-white"
-                        onClick={(e) => handleDirection(e)}
-                      >
-                        <span className="material-symbols-rounded">send</span>
+                        onClick={(e) => handleDirection(e)}>
+                        <span
+                          className={`material-symbols-rounded ${
+                            isGeneratingHelp && "animate-spin"
+                          }`}>
+                          {isGeneratingHelp ? "autorenew" : "send"}
+                        </span>
                       </Button>
                     </div>
                     {direction !== "" && (
@@ -279,19 +287,17 @@ const Map = ({ stories }: { stories: StoryProps[] }) => {
                       {storyIdea !== "" ? (
                         storyIdea
                       ) : (
-                        <p>Start generating an idea</p>
+                        <em>Start generating an idea</em>
                       )}
                     </p>
                     <div className="absolute bottom-0 right-0 -m-[1em]">
                       <Button
                         className=" flex h-[3em] w-[3em] items-center justify-center !rounded-full bg-gray-dark text-white"
-                        onClick={(e) => handleNeedHelp(e)}
-                      >
+                        onClick={(e) => handleNeedHelp(e)}>
                         <span
                           className={`material-symbols-rounded ${
                             isGeneratingHelp && "animate-spin"
-                          }`}
-                        >
+                          }`}>
                           autorenew
                         </span>
                       </Button>
@@ -313,8 +319,7 @@ const Map = ({ stories }: { stories: StoryProps[] }) => {
                       assistance === "noAssistance"
                         ? "bg-gray-dark text-white"
                         : "bg-gray"
-                    }`}
-                  >
+                    }`}>
                     No, robot
                   </Button>
                   <Button
@@ -324,8 +329,7 @@ const Map = ({ stories }: { stories: StoryProps[] }) => {
                       assistance === "helpStart"
                         ? "bg-gray-dark text-white"
                         : "bg-gray"
-                    }`}
-                  >
+                    }`}>
                     Help me get started
                   </Button>
                   <Button
@@ -335,8 +339,7 @@ const Map = ({ stories }: { stories: StoryProps[] }) => {
                       assistance === "helpWrite"
                         ? "bg-gray-dark text-white"
                         : "bg-gray"
-                    }`}
-                  >
+                    }`}>
                     Can you write it?
                   </Button>
                 </div>

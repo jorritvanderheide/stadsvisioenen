@@ -5,7 +5,7 @@
 import { FormEvent } from "react";
 import { useRouter } from "next/navigation";
 import { profanity } from "@2toad/profanity";
-import AnimatedLink from "@/app/components/buttons/AnimatedLink";
+import Button from "../buttons/Button";
 
 const CommentForm = ({ id }: { id: string }) => {
   const router = useRouter();
@@ -42,7 +42,7 @@ const CommentForm = ({ id }: { id: string }) => {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ content }),
-      }
+      },
     );
     if (!res.ok) {
       throw new Error("Failed to fetch data");
@@ -57,19 +57,21 @@ const CommentForm = ({ id }: { id: string }) => {
     <form
       id="comment-form"
       onSubmit={onSubmit}
-      className="flex gap-[2.5em] w-full">
+      className="flex w-full items-center gap-[2.5em]"
+    >
       <input
-        className="w-full h-[2.5em] px-1 border-b-2 bg-transparent outline-none border-white text-white"
+        className="w-full rounded-md border border-gray p-[1em]"
         type="text"
         name="content"
         placeholder="Add a comment"
         required
       />
-      <AnimatedLink>
-        <button type="submit">
-          <span className="material-symbols-rounded text-white pt-2">send</span>
-        </button>
-      </AnimatedLink>
+      <Button
+        type="submit"
+        className="flex h-[3em] w-[3em] items-center justify-center !rounded-full bg-white"
+      >
+        <span className="material-symbols-rounded text-black">send</span>
+      </Button>
     </form>
   );
 };

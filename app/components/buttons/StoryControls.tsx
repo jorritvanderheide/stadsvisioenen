@@ -22,7 +22,7 @@ const StoryControls: React.FC<{ id: string; story: StoryProps }> = ({
     }
 
     const confirm = window.confirm(
-      "Are you sure you want to delete this story?"
+      "Are you sure you want to delete this story?",
     );
 
     if (confirm) {
@@ -31,7 +31,7 @@ const StoryControls: React.FC<{ id: string; story: StoryProps }> = ({
         {
           method: "DELETE",
           headers: { "Content-Type": "application/json" },
-        }
+        },
       );
       if (!res.ok) {
         throw new Error("Failed to fetch data");
@@ -44,7 +44,7 @@ const StoryControls: React.FC<{ id: string; story: StoryProps }> = ({
   };
 
   return (
-    <div className="absolute top-0 left-0 w-full flex justify-between p-[6vw] opacity-80">
+    <div className="absolute left-0 top-0 flex w-full justify-between p-[6vw] text-white">
       <AnimatedLink>
         <Link href="/" className="h-fit">
           <span className="material-symbols-rounded">arrow_back</span>

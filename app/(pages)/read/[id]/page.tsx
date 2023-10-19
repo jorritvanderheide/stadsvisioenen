@@ -1,18 +1,15 @@
-// Read page: Shows a single story, with comments and ratings.
-
-// Key features:
-// - Read a story
-
-// Imports
-import { getServerSession } from "next-auth/next";
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 import StoryControls from "@/app/components/buttons/StoryControls";
-import StorySection from "@/app/components/sections/StorySection";
-import RatingSection from "@/app/components/sections/RatingSection";
 import CommentsSection from "@/app/components/sections/CommentsSection";
-import type { StoryProps, SessionProps } from "@/app/types/global.t";
+import RatingSection from "@/app/components/sections/RatingSection";
+import StorySection from "@/app/components/sections/StorySection";
+import type { SessionProps, StoryProps } from "@/app/types/global.t";
+import { getServerSession } from "next-auth/next";
 
-// Generate static paths for all stories
+/**
+ * Generates static paths for all stories
+ * @returns {any}
+ */
 export async function generateStaticParams() {
   const stories = await fetch(`${process.env.NEXT_PUBLIC_FETCH_URL}/stories`, {
     method: "GET",

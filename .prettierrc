@@ -1,0 +1,13 @@
+{
+  "trailingComma": "es5",
+  "tabWidth": 2,
+  "semi": true,
+  "max_line_length": 80,
+  "arrowParens": "always",
+  "jsxBracketSameLine": true,
+  "bracketSpacing": true,
+  "plugins": [
+    "prettier-plugin-tailwindcss",
+    "prettier-plugin-organize-attributes"
+  ]
+}
