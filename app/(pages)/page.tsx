@@ -26,7 +26,7 @@ const Home: NextPage = async () => {
     <>
       <main className="h-[100svh] w-full overflow-hidden">
         <Header />
-        <Map stories={stories} />
+        <Map stories={stories!} />
       </main>
     </>
   );
