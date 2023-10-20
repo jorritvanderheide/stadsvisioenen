@@ -23,9 +23,9 @@ const ReactQuill = dynamic(() => import("react-quill"), { ssr: false });
 const Editor: React.FC = () => {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const id = searchParams.get("id") || undefined;
-  const longitude = Number(searchParams.get("lng")) || undefined;
-  const latitude = Number(searchParams.get("lat")) || undefined;
+  const id = searchParams?.get("id") || undefined;
+  const longitude = Number(searchParams?.get("lng")) || undefined;
+  const latitude = Number(searchParams?.get("lat")) || undefined;
 
   const [story, setStory] = useState<StoryProps>();
 

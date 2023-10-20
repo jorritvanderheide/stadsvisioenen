@@ -1,9 +1,8 @@
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
-import prisma from "@/app/lib/prisma/prisma";
 import type { NextRequest } from "next/server";
 import type { NextAuthOptions } from "next-auth";
-import type { StoryProps, SessionProps } from "@/app/types/global.t";
+import type { SessionProps } from "@/app/types/global.t";
 
 /**
  * Handle post request

@@ -1,13 +1,14 @@
 import Header from "@/app/components/bars/Header";
 import Map from "@/app/components/maps/Map";
 import { NextPage } from "next";
+import type { StoryProps } from "@/app/types/global.t";
 
 // Fetch stories
 async function getStories() {
   const res = await fetch(`${process.env.NEXT_PUBLIC_FETCH_URL}/stories`, {
     method: "GET",
     headers: { "Content-Type": "application/json" },
-    cache: "no-cache",
+    cache: "no-store",
   });
 
   if (!res.ok) {
@@ -19,13 +20,13 @@ async function getStories() {
 
 // Export default
 const Home: NextPage = async () => {
-  const stories = await getStories();
+  const stories: StoryProps[] = await getStories();
 
   return (
     <>
       <main className="h-[100svh] w-full overflow-hidden">
         <Header />
-        {stories && <Map stories={stories} />}
+        {/* <Map stories={stories!} /> */}
       </main>
     </>
   );

@@ -20,7 +20,7 @@
     "color.js": "^1.2.0",
     "framer-motion": "^10.16.4",
     "material-symbols": "^0.13.0",
-    "next": "13.4.19",
+    "next": "^13.5.4",
     "next-auth": "^4.23.2",
     "react": "^18",
     "react-dom": "^18",
