@@ -31,7 +31,6 @@ async function getStory(id: string) {
     {
       method: "GET",
       headers: { "Content-Type": "application/json" },
-      cache: "no-cache",
     }
   );
 
