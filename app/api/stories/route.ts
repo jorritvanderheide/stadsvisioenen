@@ -28,6 +28,7 @@ export const GET = async (request: NextRequest): Promise<Response> => {
   } else {
     try {
       const res = await prisma.story.findMany({
+        take: 50,
         where: { published: true },
         orderBy: {
           updatedAt: "asc",
