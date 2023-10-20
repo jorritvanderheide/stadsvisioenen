@@ -1,12 +1,17 @@
+"use client";
+
 import Header from "@/app/components/bars/Header";
 import Map from "@/app/components/maps/Map";
+import { StoryProps } from "@/app/types/global.t";
 import { NextPage } from "next";
+import { useState, useEffect } from "react";
 
 // Fetch stories
 async function getStories() {
   const res = await fetch(`${process.env.NEXT_PUBLIC_FETCH_URL}/stories`, {
     method: "GET",
     headers: { "Content-Type": "application/json" },
+    cache: "no-store",
   });
 
   if (!res.ok) {
@@ -17,8 +22,12 @@ async function getStories() {
 }
 
 // Export default
-const Home: NextPage = async () => {
-  const stories = await getStories();
+const Home: NextPage = () => {
+  const [stories, setStories] = useState<StoryProps[]>();
+
+  useEffect(() => {
+    getStories().then((data) => setStories(data));
+  }, []);
 
   return (
     <>
