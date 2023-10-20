@@ -46,6 +46,7 @@ async function getStory(id: string) {
 const Read = async ({ params }: { params: { id: string } }) => {
   const session: SessionProps | null = await getServerSession(authOptions)!;
   const story: StoryProps = await getStory(params.id);
+  console.log(params.id);
 
   return story ? (
     <main>

@@ -17,6 +17,8 @@ import AnimatedLink from "@/app/components/buttons/AnimatedLink";
 const Header: FunctionComponent = () => {
   const { data: session } = useSession();
 
+  console.log(session);
+
   return (
     <header
       className={`pointer-events-none fixed left-0 top-0 z-10 h-[5em] w-screen`}>
