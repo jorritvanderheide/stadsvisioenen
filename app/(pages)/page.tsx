@@ -31,7 +31,7 @@ const Home: NextPage = async () => {
               <h1 className="text-h1 font-bold">Loading...</h1>
             </div>
           }>
-          <Map stories={stories!} />
+          <Map stories={stories} />
         </Suspense>
       </main>
     </>

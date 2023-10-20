@@ -29,6 +29,15 @@ export const GET = async (request: NextRequest): Promise<Response> => {
     try {
       const res = await prisma.story.findMany({
         where: { published: true },
+        orderBy: {
+          updatedAt: "asc",
+        },
+        select: {
+          id: true,
+          imageUrl: true,
+          longitude: true,
+          latitude: true,
+        },
       });
 
       return Response.json(res);
