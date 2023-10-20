@@ -22,7 +22,7 @@ const StoryControls: React.FC<{ id: string; story: StoryProps }> = ({
     }
 
     const confirm = window.confirm(
-      "Are you sure you want to delete this story?",
+      "Are you sure you want to delete this story?"
     );
 
     if (confirm) {
@@ -31,7 +31,7 @@ const StoryControls: React.FC<{ id: string; story: StoryProps }> = ({
         {
           method: "DELETE",
           headers: { "Content-Type": "application/json" },
-        },
+        }
       );
       if (!res.ok) {
         throw new Error("Failed to fetch data");
@@ -63,6 +63,15 @@ const StoryControls: React.FC<{ id: string; story: StoryProps }> = ({
             </button>
           </AnimatedLink>
         </div>
+      )}
+      {session?.user?.email === process.env.NEXT_PUBLIC_MOD_EMAIL && (
+        <AnimatedLink>
+          <button onClick={handleDelete}>
+            <span className="material-symbols-rounded !text-[#ff0000]">
+              delete
+            </span>
+          </button>
+        </AnimatedLink>
       )}
     </div>
   );

@@ -155,18 +155,32 @@ export const DELETE = async (request: NextRequest): Promise<Response> => {
     return Response.json({ error: "You must be signed in to delete comments" });
   }
 
-  try {
-    const res = await prisma.story.delete({
-      where: {
-        id: id,
-        user: {
-          email: session!.user!.email!,
+  if (session.user.email === process.env.NEXT_PUBLIC_MOD_EMAIL) {
+    try {
+      const res = await prisma.story.delete({
+        where: {
+          id: id,
         },
-      },
-    });
+      });
 
-    return Response.json(res);
-  } catch (error) {
-    return Response.json(error);
+      return Response.json(res);
+    } catch (error) {
+      return Response.json(error);
+    }
+  } else {
+    try {
+      const res = await prisma.story.delete({
+        where: {
+          id: id,
+          user: {
+            email: session!.user!.email!,
+          },
+        },
+      });
+
+      return Response.json(res);
+    } catch (error) {
+      return Response.json(error);
+    }
   }
 };

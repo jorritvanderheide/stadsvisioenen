@@ -48,9 +48,9 @@ const CommentsSection = async ({
           )}
         </div>
       </div>
-      <div className="relative -mb-[7.5vh] flex w-screen justify-center p-[7.5vh]">
+      <div className="relative -mb-[7.5vh] flex w-full justify-center p-[7.5vh]">
         <Image
-          className="absolute bottom-0 left-0 z-[-1] w-full object-cover opacity-80 blur-2xl"
+          className="absolute bottom-0 left-0 z-[-1] h-full w-full object-cover opacity-80 blur-2xl"
           src={imageUrl}
           width={1024}
           height={1024}

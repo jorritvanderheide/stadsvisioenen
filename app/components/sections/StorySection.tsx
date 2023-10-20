@@ -12,7 +12,7 @@ const StorySection: React.FC<StorySectionProps> = ({
   return (
     <section id="story">
       <Image
-        className="absolute left-0 top-0 z-[-1] w-full object-cover opacity-80 blur-2xl"
+        className="absolute left-0 top-0 z-[-1] max-h-[60vh] w-full object-cover opacity-80 blur-2xl"
         src={imageUrl}
         width={1024}
         height={1024}
