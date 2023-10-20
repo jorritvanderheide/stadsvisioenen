@@ -23,8 +23,6 @@ const Map = ({ stories }: { stories: StoryProps[] }) => {
   const [tempMarker, setTempMarker] = useState<TempMarkerProps>();
   const { data: session } = useSession();
 
-  const [navigate, setNavigate] = useState("");
-
   // New Story Variables
   const [isCreating, setIsCreating] = useState(false);
   const [topic, setTopic] = useState<string>("");
@@ -48,12 +46,6 @@ const Map = ({ stories }: { stories: StoryProps[] }) => {
     }),
     []
   );
-
-  useEffect(() => {
-    if (navigate !== "") {
-      router.push(navigate);
-    }
-  }, [navigate, router]);
 
   // Load the Google Maps API
   const { isLoaded } = useLoadScript({
@@ -87,8 +79,8 @@ const Map = ({ stories }: { stories: StoryProps[] }) => {
 
   // Variants for animation
   const mapVariants = {
-    full: { height: "100vh" },
-    shared: { height: "40vh" },
+    full: { height: "100svh" },
+    shared: { height: "40svh" },
   };
   const creationVariants = {
     hidden: { display: "none", marginTop: "0" },
@@ -380,7 +372,7 @@ const Map = ({ stories }: { stories: StoryProps[] }) => {
                 lat: Number(marker.latitude),
                 lng: Number(marker.longitude),
               }}
-              onClick={() => setNavigate(`/read/${marker.id}`)}
+              onClick={() => router.push(`/read/${marker.id}`)}
               icon={{
                 url: `${marker.imageUrl}#custom_marker`,
                 scaledSize: new window.google.maps.Size(65, 65),
@@ -405,7 +397,7 @@ const Map = ({ stories }: { stories: StoryProps[] }) => {
             <p className="px-[6vw] text-center text-h3 font-bold text-white drop-shadow-xl">
               {!session
                 ? "Log in to start envisioning the future"
-                : "Start envisioning the future by clicking on a location you want to envision"}
+                : "Start envisioning the future by clicking on a location"}
             </p>
           </div>
         )}
@@ -416,7 +408,7 @@ const Map = ({ stories }: { stories: StoryProps[] }) => {
           variants={creationVariants}
           initial="hidden"
           animate={isCreating ? "visible" : "hidden"}>
-          <div className="relative flex flex-col items-center gap-[5em]">
+          <div className="relative flex w-full max-w-prose flex-col items-center gap-[5em]">
             {/* Close icon */}
             <div className="absolute left-0 top-0">
               <AnimatedLink className="absolute">
@@ -427,15 +419,15 @@ const Map = ({ stories }: { stories: StoryProps[] }) => {
             </div>
 
             {/* Info text */}
-            <div className="mt-[7.5vh] w-prose">
-              <p className="text-h3 font-semibold ">
+            <div className="mt-[7.5vh]">
+              <p className="text-h3 font-semibold">
                 With the help of artificial intelligence, you can help us create
                 a more diverse and inclusive dialogue about urban development.
               </p>
             </div>
 
             <div
-              className={`flex w-prose flex-col items-center gap-[2.5em] ${
+              className={`flex w-full max-w-prose flex-col items-center gap-[2.5em] ${
                 topic !== "" ? "gap-[5em]" : "gap-[2.5em]"
               }`}>
               {/* Topic bar */}
@@ -443,7 +435,7 @@ const Map = ({ stories }: { stories: StoryProps[] }) => {
                 <h2 className="text-h2 font-bold">
                   Do you already have a topic in mind?
                 </h2>
-                <div className="flex justify-between gap-1 rounded-md bg-gray">
+                <div className="flex justify-between gap-1 rounded-md bg-gray text-[3vw] md:text-body">
                   <Button
                     noY
                     onClick={() => setTopic("hasTopic")}
@@ -546,7 +538,7 @@ const Map = ({ stories }: { stories: StoryProps[] }) => {
               </div>
 
               {/* Assistance bar */}
-              <div className="flex flex-col items-center gap-[2.5em]">
+              <div className="flex flex-col items-center gap-[2.5em] text-[3vw] md:text-body">
                 <h2 className="text-h2 font-bold">
                   Do you want me to help you write?
                 </h2>

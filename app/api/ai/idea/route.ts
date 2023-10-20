@@ -33,7 +33,6 @@ export const POST = async (request: NextRequest): Promise<Response> => {
             role: "user",
             content: `Write a one-sentence idea to for a short story based on these criteria:
             It should be speculative fiction, but not about technology.
-            It should be about the future of a specific location in the city of Eindhoven.
             It should be about one of the following topics: Nutrition and Basic Medical Care, Water and Sanitation, Shelter, Personal Security, Access to Basic Knowledge, Access to Information and 
             Communication, Health and Wellness, Environmental Quality, Personal Rights, Personal Freedom and Choice, Tolerance and Inclusion, Access to Advanced Education.
             Don't mention these domains specifically, but situate the story in an everyday situtation in one of them.

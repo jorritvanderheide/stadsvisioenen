@@ -35,15 +35,13 @@ export const POST = async (request: NextRequest): Promise<Response> => {
             role: "user",
             content: `Write a beginning of a story based on these criteria:
             Extremely provocative and immersive.
-            About a possible future of the city of Eindhoven.
+            About improvement to the build environment or city for the future.
             The story should be about ${topic}.
             Make it probable, and not too futuristic. 
-            Make it situated to the context of Eindhoven, the Netherlands.
-            Use about 250 words.
             `,
           },
         ],
-        max_tokens: 150,
+        max_tokens: 250,
         temperature: 1,
       }),
     });

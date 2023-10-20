@@ -50,29 +50,32 @@ const StoryControls: React.FC<{ id: string; story: StoryProps }> = ({
           <span className="material-symbols-rounded">arrow_back</span>
         </Link>
       </AnimatedLink>
-      {session?.user?.id === story.userId && (
-        <div className="flex flex-col items-center gap-4">
+      <div className="flex flex-col items-center gap-4">
+        {session?.user?.id === story.userId && (
           <AnimatedLink>
             <Link href={`/write?id=${story.id}`}>
               <span className="material-symbols-rounded">edit</span>
             </Link>
           </AnimatedLink>
+        )}
+        {session?.user?.id === story.userId && (
           <AnimatedLink>
             <button onClick={handleDelete}>
               <span className="material-symbols-rounded">delete</span>
             </button>
           </AnimatedLink>
-        </div>
-      )}
-      {session?.user?.email === process.env.NEXT_PUBLIC_MOD_EMAIL && (
-        <AnimatedLink>
-          <button onClick={handleDelete}>
-            <span className="material-symbols-rounded !text-[#ff0000]">
-              delete
-            </span>
-          </button>
-        </AnimatedLink>
-      )}
+        )}
+
+        {session?.user?.email === process.env.NEXT_PUBLIC_MOD_EMAIL && (
+          <AnimatedLink>
+            <button onClick={handleDelete}>
+              <span className="material-symbols-rounded !text-[#ff0000]">
+                delete
+              </span>
+            </button>
+          </AnimatedLink>
+        )}
+      </div>
     </div>
   );
 };
