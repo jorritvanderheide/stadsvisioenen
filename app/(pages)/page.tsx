@@ -8,10 +8,7 @@ import { Suspense } from "react";
 const getStories = async () => {
   const res = await fetch(`${process.env.NEXT_PUBLIC_FETCH_URL}/stories`, {
     method: "GET",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    cache: "no-cache",
+    headers: { "Content-Type": "application/json" },
   });
 
   if (!res.ok) {
