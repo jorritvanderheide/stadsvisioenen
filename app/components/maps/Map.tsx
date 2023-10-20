@@ -23,6 +23,8 @@ const Map = ({ stories }: { stories: StoryProps[] }) => {
   const [tempMarker, setTempMarker] = useState<TempMarkerProps>();
   const { data: session } = useSession();
 
+  const [navigate, setNavigate] = useState("");
+
   // New Story Variables
   const [isCreating, setIsCreating] = useState(false);
   const [topic, setTopic] = useState<string>("");
@@ -46,6 +48,12 @@ const Map = ({ stories }: { stories: StoryProps[] }) => {
     }),
     []
   );
+
+  useEffect(() => {
+    if (navigate !== "") {
+      router.push(navigate);
+    }
+  }, [navigate, router]);
 
   // Load the Google Maps API
   const { isLoaded } = useLoadScript({
@@ -372,7 +380,7 @@ const Map = ({ stories }: { stories: StoryProps[] }) => {
                 lat: Number(marker.latitude),
                 lng: Number(marker.longitude),
               }}
-              onClick={() => router.push(`/read/${marker.id}`)}
+              onClick={() => setNavigate(`/read/${marker.id}`)}
               icon={{
                 url: `${marker.imageUrl}#custom_marker`,
                 scaledSize: new window.google.maps.Size(65, 65),
