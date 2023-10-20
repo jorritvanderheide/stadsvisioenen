@@ -39,12 +39,11 @@ export const POST = async (request: NextRequest): Promise<Response> => {
             The story should be about ${topic}.
             Make it probable, and not too futuristic. 
             Make it situated to the context of Eindhoven, the Netherlands.
-            In the style of a Studio Ghibli movie.
-            Use about 150 words.
+            Use about 100 words.
             `,
           },
         ],
-        max_tokens: 350,
+        max_tokens: 150,
         temperature: 1,
       }),
     });
