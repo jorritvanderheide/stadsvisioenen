@@ -2,11 +2,10 @@ import Header from "@/app/components/bars/Header";
 import Map from "@/app/components/maps/Map";
 import { NextPage } from "next";
 import type { StoryProps } from "@/app/types/global.t";
-import { Suspense } from "react";
 
 // Fetch stories
 const getStories = async () => {
-  const res = await fetch(`${process.env.NEXT_PUBLIC_FETCH_URL}/stories`, {
+  const res = await fetch(`${process.env.NEXT_PUBLIC_FETCH_URL}/stories/all`, {
     method: "GET",
     headers: { "Content-Type": "application/json" },
   });
