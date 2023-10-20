@@ -14,7 +14,7 @@ const Button: FunctionComponent<ButtonProps> = ({
     <AnimatedLink noY={noY && true}>
       <button
         onClick={onClick}
-        className={`bg-gray rounded-md py-[0.25em] px-[0.75em] ${className}`}>
+        className={`rounded-md bg-gray p-4 ${className}`}>
         {children}
       </button>
     </AnimatedLink>
