@@ -1,7 +1,6 @@
 import Header from "@/app/components/bars/Header";
 import Map from "@/app/components/maps/Map";
 import { NextPage } from "next";
-import type { StoryProps } from "@/app/types/global.t";
 
 // Fetch stories
 const getStories = async () => {
@@ -19,13 +18,13 @@ const getStories = async () => {
 
 // Export default
 const Home: NextPage = async () => {
-  const stories: StoryProps[] = await getStories();
+  const stories = (await getStories()) || null;
 
   return (
     <>
       <main className="h-[100svh] w-full overflow-hidden">
         <Header />
-        <Map stories={stories!} />
+        {stories && <Map stories={stories} />}
       </main>
     </>
   );
