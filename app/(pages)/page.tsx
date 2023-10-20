@@ -1,32 +1,23 @@
 import Header from "@/app/components/bars/Header";
 import Map from "@/app/components/maps/Map";
-import { NextPage } from "next";
+import prisma from "@/app/lib/prisma/prisma";
 
 // Fetch stories
 async function getData() {
-  const res = await fetch(`${process.env.NEXT_PUBLIC_FETCH_URL}/stories/all`, {
-    method: "GET",
-    headers: { "Content-Type": "application/json" },
-  });
+  const res: any = await prisma.story.findMany();
 
-  if (!res.ok) {
-    throw new Error("Failed to fetch stories");
-  }
-
-  return res.json();
+  return res;
 }
 
 // Export default
 export default async function Home() {
   const data = await getData();
 
-  console.log(data);
-
   return (
     <>
       <main className="h-[100svh] w-full overflow-hidden">
         <Header />
-        {/* {data && <Map stories={data} />} */}
+        {data && <Map stories={data} />}
       </main>
     </>
   );
