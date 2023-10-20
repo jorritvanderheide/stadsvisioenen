@@ -52,8 +52,8 @@ const Header: FunctionComponent = () => {
         ) : (
           <AnimatedLink>
             <Link href="/api/auth/signin" className="relative">
-              <div className="h-[3em] w-[3em] cursor-pointer rounded-full border-[4px] border-white bg-white/25 shadow-md">
-                <span className="material-symbols-rounded absolute left-[0.7em] top-[0.85em] font-semibold text-white">
+              <div className="flex h-[3em] w-[3em] cursor-pointer items-center justify-center rounded-full border-[4px] border-white bg-white/25 shadow-md">
+                <span className="material-symbols-rounded font-semibold text-white">
                   login
                 </span>
               </div>

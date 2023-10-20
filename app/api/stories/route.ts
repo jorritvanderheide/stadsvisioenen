@@ -43,6 +43,7 @@ export const GET = async (request: NextRequest): Promise<Response> => {
 
       return Response.json(res);
     } catch (error) {
+      console.log(error);
       return Response.json(error);
     }
   }

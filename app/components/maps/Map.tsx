@@ -420,10 +420,9 @@ const Map = ({ stories }: { stories: StoryProps[] }) => {
 
             {/* Info text */}
             <div className="mt-[7.5vh] w-prose">
-              {/* TODO - change this text*/}
               <p className="text-h3 font-semibold ">
-                Stories can help us imagine the future. Using generative AI, we
-                can jumpstart the creative process in future storytelling.
+                With the help of artificial intelligence, you can help us create
+                a more diverse and inclusive dialogue about urban development.
               </p>
             </div>
 

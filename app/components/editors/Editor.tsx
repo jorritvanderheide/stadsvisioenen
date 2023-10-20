@@ -30,8 +30,8 @@ const Editor: React.FC = () => {
   const [story, setStory] = useState<StoryProps>();
 
   const [randomId, setRandomId] = useState<string>();
-  const [title, setTitle] = useState("Title");
-  const [content, setContent] = useState("Content");
+  const [title, setTitle] = useState("A new vision");
+  const [content, setContent] = useState("Start writing here...");
   const [imageUrl, setImageUrl] = useState("/images/placeholder.svg");
   const [isGenerating, setIsGenerating] = useState(false);
 
@@ -221,7 +221,7 @@ const Editor: React.FC = () => {
   return (
     <div className="flex w-full flex-col items-center">
       <Image
-        className="absolute left-0 top-0 z-[-1] max-h-screen w-full object-cover opacity-80 blur-2xl"
+        className="absolute left-0 top-0 z-[-1] max-h-[100svh] w-full object-cover opacity-80 blur-2xl"
         src={imageUrl}
         width={1024}
         height={1024}
