@@ -256,7 +256,7 @@ const Editor: React.FC = () => {
           </div>
         </div>
         <input
-          className="flex w-full items-center justify-center border-b-2 border-dotted border-black pb-[0.5em] text-center text-h1 font-bold outline-none"
+          className="flex w-full items-center justify-center border-b-2 border-dotted border-gray-dark pb-[0.5em] text-center text-h1 font-bold outline-none"
           type="text"
           value={title}
           onChange={(e) => setTitle(e.target.value)}

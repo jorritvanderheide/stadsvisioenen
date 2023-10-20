@@ -488,7 +488,7 @@ const Map = ({ stories }: { stories: StoryProps[] }) => {
                   <div className="mb-[2.5em] flex w-full flex-col items-center gap-[2.5em]">
                     <div className="flex w-full items-center justify-between gap-[1em]">
                       <input
-                        className="w-full rounded-md border border-gray p-[1em]"
+                        className="w-full rounded-md border border-gray-dark p-[1em]"
                         value={direction}
                         onChange={(e) => setDirection(e.target.value)}
                         placeholder="Describe a direction for your vision for the future"

@@ -11,7 +11,7 @@ const config: Config = {
       black: "#333",
       white: "#fff",
       gray: "#d9d9d9",
-      "gray-dark": "#555",
+      "gray-dark": "#16A34A",
     },
     fontSize: {
       h0: ["2.5rem", "1.25"],

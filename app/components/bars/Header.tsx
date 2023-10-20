@@ -17,36 +17,49 @@ import AnimatedLink from "@/app/components/buttons/AnimatedLink";
 const Header: FunctionComponent = () => {
   const { data: session } = useSession();
 
-  console.log(session);
-
   return (
     <header
       className={`pointer-events-none fixed left-0 top-0 z-10 h-[5em] w-screen`}>
-      <div className="flex items-center justify-between p-[5em]">
-        <p className="text-h0 font-bold uppercase text-white drop-shadow-md">
+      <div className="flex items-center justify-between p-[6vw] xl:py-[4vw]">
+        <p className="text-h1 font-bold uppercase text-white drop-shadow-md lg:text-h0">
           Stadsvisioenen
         </p>
-        <AnimatedLink>
-          {session ? (
-            <button onClick={() => signOut()}>
+
+        {session ? (
+          <>
+            {session.user?.email! === process.env.NEXT_PUBLIC_ADMIN_EMAIL ? (
               <Image
-                className="h-[4em] w-[4em] cursor-pointer rounded-full border-4 border-white shadow-md"
+                className="h-[3em] w-[3em] cursor-pointer rounded-full border-[4px] border-white shadow-md"
                 src={session.user?.image!}
                 width={460}
                 height={460}
                 alt={`Profile image for ${session.user?.name}`}
               />
-            </button>
-          ) : (
+            ) : (
+              <AnimatedLink>
+                <button onClick={() => signOut()}>
+                  <Image
+                    className="h-[3em] w-[3em] cursor-pointer rounded-full border-[4px] border-white shadow-md"
+                    src={session.user?.image!}
+                    width={460}
+                    height={460}
+                    alt={`Profile image for ${session.user?.name}`}
+                  />
+                </button>
+              </AnimatedLink>
+            )}
+          </>
+        ) : (
+          <AnimatedLink>
             <Link href="/api/auth/signin" className="relative">
-              <div className="h-[4em] w-[4em] cursor-pointer rounded-full border-4 border-white bg-white/25 shadow-md">
+              <div className="h-[3em] w-[3em] cursor-pointer rounded-full border-[4px] border-white bg-white/25 shadow-md">
                 <span className="material-symbols-rounded absolute left-[0.7em] top-[0.85em] font-semibold text-white">
                   login
                 </span>
               </div>
             </Link>
-          )}
-        </AnimatedLink>
+          </AnimatedLink>
+        )}
       </div>
     </header>
   );
