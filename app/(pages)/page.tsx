@@ -8,7 +8,9 @@ async function getStories() {
   const res = await fetch(`${process.env.NEXT_PUBLIC_FETCH_URL}/stories`, {
     method: "GET",
     headers: { "Content-Type": "application/json" },
-    cache: "no-store",
+    next: {
+      revalidate: 0,
+    },
   });
 
   if (!res.ok) {
