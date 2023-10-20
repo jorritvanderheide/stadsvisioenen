@@ -33,6 +33,12 @@ export const GET = async (request: NextRequest): Promise<Response> => {
         orderBy: {
           updatedAt: "asc",
         },
+        select: {
+          id: true,
+          imageUrl: true,
+          longitude: true,
+          latitude: true,
+        },
       });
 
       return Response.json(res);

@@ -1,5 +1,3 @@
-"use client";
-
 import Header from "@/app/components/bars/Header";
 import Map from "@/app/components/maps/Map";
 import { StoryProps } from "@/app/types/global.t";
@@ -21,12 +19,8 @@ async function getStories() {
 }
 
 // Export default
-const Home: NextPage = () => {
-  const [stories, setStories] = useState<StoryProps[]>();
-
-  useEffect(() => {
-    getStories().then((data) => setStories(data));
-  }, []);
+const Home: NextPage = async () => {
+  const stories = await getStories();
 
   return (
     <>

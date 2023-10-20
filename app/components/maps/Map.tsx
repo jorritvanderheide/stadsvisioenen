@@ -6,7 +6,14 @@ import { useMemo, useState, useRef, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
 import { AnimatePresence, delay, motion } from "framer-motion";
-import { useLoadScript, GoogleMap, MarkerF } from "@react-google-maps/api";
+import {
+  useLoadScript,
+  GoogleMap,
+  MarkerF,
+  Marker,
+  MarkerClusterer,
+  MarkerClustererF,
+} from "@react-google-maps/api";
 import { StoryProps, TempMarkerProps } from "@/app/types/global.t";
 import Button from "@/app/components/buttons/Button";
 import AnimatedLink from "@/app/components/buttons/AnimatedLink";
@@ -350,6 +357,10 @@ const Map = ({ stories }: { stories: StoryProps[] }) => {
     }
   }, [topic, isGenerating]);
 
+  useEffect(() => {
+    router.refresh();
+  }, [router]);
+
   return isLoaded ? (
     <main className="relative h-full w-full overflow-y-auto">
       <motion.div
@@ -420,6 +431,7 @@ const Map = ({ stories }: { stories: StoryProps[] }) => {
 
             {/* Info text */}
             <div className="mt-[7.5vh] w-prose">
+              {/* TODO - change this text*/}
               <p className="text-h3 font-semibold ">
                 Stories can help us imagine the future. Using generative AI, we
                 can jumpstart the creative process in future storytelling.
@@ -540,7 +552,7 @@ const Map = ({ stories }: { stories: StoryProps[] }) => {
               {/* Assistance bar */}
               <div className="flex flex-col items-center gap-[2.5em]">
                 <h2 className="text-h2 font-bold">
-                  Do you already have a topic in mind?
+                  Do you want me to help you write?
                 </h2>
                 <div className="flex justify-between gap-1 rounded-md bg-gray">
                   <Button
