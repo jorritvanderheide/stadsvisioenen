@@ -3,15 +3,11 @@ import Map from "@/app/components/maps/Map";
 import { NextPage } from "next";
 import type { StoryProps } from "@/app/types/global.t";
 import { Suspense } from "react";
-import "server-only";
 
 // Fetch stories
 const getStories = async () => {
   const res = await fetch(`${process.env.NEXT_PUBLIC_FETCH_URL}/stories`, {
     method: "GET",
-    next: {
-      revalidate: 1,
-    },
   });
 
   if (!res.ok) {
