@@ -10,7 +10,7 @@ const getStories = async () => {
   const res = await fetch(`${process.env.NEXT_PUBLIC_FETCH_URL}/stories`, {
     method: "GET",
     next: {
-      revalidate: 0,
+      revalidate: 1,
     },
   });
 
@@ -29,7 +29,12 @@ const Home: NextPage = async () => {
     <>
       <main className="h-[100svh] w-full overflow-hidden">
         <Header />
-        <Suspense fallback={<div>Loading...</div>}>
+        <Suspense
+          fallback={
+            <div className="flex h-full w-full items-center justify-center">
+              <h1 className="text-h1 font-bold">Loading...</h1>
+            </div>
+          }>
           <Map stories={stories!} />
         </Suspense>
       </main>
