@@ -2,7 +2,7 @@
 
 "use client";
 
-import { useMemo, useState, useRef } from "react";
+import { useMemo, useState, useRef, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
 import { AnimatePresence, delay, motion } from "framer-motion";
@@ -10,6 +10,10 @@ import { useLoadScript, GoogleMap, MarkerF } from "@react-google-maps/api";
 import { StoryProps, TempMarkerProps } from "@/app/types/global.t";
 import Button from "@/app/components/buttons/Button";
 import AnimatedLink from "@/app/components/buttons/AnimatedLink";
+import { profanity } from "@2toad/profanity";
+import { createId } from "@paralleldrive/cuid2";
+import { decode } from "base64-arraybuffer";
+import { supabase } from "@/app/lib/supabase/supabase";
 
 const Map = ({ stories }: { stories: StoryProps[] }) => {
   const ref = useRef(null);
@@ -23,12 +27,13 @@ const Map = ({ stories }: { stories: StoryProps[] }) => {
   const [isCreating, setIsCreating] = useState(false);
   const [topic, setTopic] = useState<string>("");
   const [assistance, setAssistance] = useState<string>("");
+  const [isGenerating, setIsGenerating] = useState(false);
+  const [randomId, setRandomId] = useState<string>(createId());
 
   // Topic variables
-  const [directionValue, setDirectionValue] = useState<string>("");
   const [direction, setDirection] = useState<string>("");
+  const [directionValue, setDirectionValue] = useState<string>("");
   const [isGeneratingHelp, setIsGeneratingHelp] = useState(false);
-  const [storyIdea, setStoryIdea] = useState<string>("");
 
   // Set the map options
   const mapOptions = useMemo(
@@ -82,30 +87,232 @@ const Map = ({ stories }: { stories: StoryProps[] }) => {
     visible: { display: "block", marginTop: "-3em" },
   };
 
+  // Check for profanity
+  const checkProfanity = (story: string) => {
+    if (profanity.exists(story)) {
+      return true;
+    } else {
+      return false;
+    }
+  };
+
+  // Generate image description from story content
+  const getDescription = async (content: string) => {
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_FETCH_URL}/stories/images/descriptions`,
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ prompt: content }),
+      }
+    );
+
+    if (!res.ok) {
+      throw new Error("Failed to fetch data");
+    }
+
+    return res.json();
+  };
+
+  // Upload image to supabase
+  const uploadImage = async (image: string) => {
+    const filename = `public/${randomId}.webp?${new Date().getTime()}`;
+    const { data, error } = await supabase.storage
+      .from("story-covers")
+      .upload(filename, decode(image), {
+        contentType: "image/webp",
+        upsert: true,
+      });
+
+    if (data) {
+      const filepath = data.path;
+      const imageUrl = supabase.storage
+        .from("story-covers")
+        .getPublicUrl(filepath);
+
+      const generatedImage = imageUrl.data.publicUrl;
+
+      return generatedImage;
+    } else {
+      console.error(error);
+    }
+  };
+
+  // Generate image from description
+  const generateImage = async (generatedStory: string) => {
+    if (isGenerating) {
+      return;
+    }
+
+    const description = await getDescription(generatedStory);
+
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_FETCH_URL}/stories/images`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          prompt: description,
+        }),
+      }
+    );
+
+    if (!res.ok) {
+      throw new Error("Failed to generate image");
+    }
+
+    const image = await res.json();
+
+    const generatedImage = await uploadImage(image);
+
+    return generatedImage;
+  };
+
+  // Upload the story
+  const handleUpload = async (generatedStory: string) => {
+    if (!session) return;
+
+    if (checkProfanity(generatedStory)) {
+      alert("Profanity detected");
+      return;
+    }
+
+    setRandomId(createId());
+
+    const generatedImage = await generateImage(generatedStory);
+
+    const lines: string[] = [];
+
+    generatedStory.split("\n").map((line) => {
+      if (line.trim() !== "") {
+        line = `<p>${line}</p>`;
+        line = line.replace(/,/g, "&&]");
+        lines.push(line);
+      }
+    });
+
+    const htmlString = lines
+      .toString()
+      .replace(/,/g, "<p></p>")
+      .replace(/&&]/g, ",");
+
+    const res = await fetch(`${process.env.NEXT_PUBLIC_FETCH_URL}/stories`, {
+      method: "POST",
+      body: JSON.stringify({
+        id: randomId,
+        title: "Title",
+        content: htmlString,
+        imageUrl: generatedImage,
+        longitude: tempMarker?.longitude,
+        latitude: tempMarker?.latitude,
+        published: false,
+      }),
+    });
+
+    if (!res.ok) {
+      throw new Error("Failed to save");
+    }
+
+    setIsGenerating(false);
+
+    router.push(`/write?id=${randomId}`);
+  };
+
   // Handle the story form
   const handleStoryForm = async (e: any) => {
     e.preventDefault();
 
-    if (topic === "" || assistance === "") {
-      window.alert("Please fill in all the fields");
+    if (!session) return;
+    if (isGenerating) return;
+
+    if (topic === "" || assistance === "" || directionValue === "") {
+      alert(
+        "Please select a topic and assistance option before creating a story"
+      );
     }
 
-    // Create a new story
+    setIsGenerating(true);
+
+    if (assistance === "noAssistance") {
+      router.push(
+        `/write?lng=${tempMarker?.longitude}&lat=${tempMarker?.latitude}`
+      );
+    } else {
+      if (assistance === "helpStart") {
+        const res = await fetch(
+          `${process.env.NEXT_PUBLIC_FETCH_URL}/ai/story-start`,
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              topic: directionValue,
+            }),
+          }
+        );
+
+        if (!res.ok) {
+          throw new Error("Failed fetching data");
+        }
+
+        const start = await res.json();
+
+        handleUpload(start);
+      } else {
+        const res = await fetch(
+          `${process.env.NEXT_PUBLIC_FETCH_URL}/ai/story`,
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              topic: directionValue,
+            }),
+          }
+        );
+
+        if (!res.ok) {
+          throw new Error("Failed fetching data");
+        }
+
+        const story = await res.json();
+
+        handleUpload(story);
+      }
+    }
   };
 
   // Handle the direction form
   const handleDirection = async (e: any) => {
     e.preventDefault();
 
+    if (isGenerating) return;
+
     setIsGeneratingHelp(true);
 
-    await new Promise((resolve) => setTimeout(resolve, 2000));
-
-    setDirection(
-      "A paragraph is defined as “a group of sentences or a single sentence that forms a unit” (Lunsford and Connors 116). Length and appearance do not determine whether a section in a paper is a paragraph. For instance, in some styles of writing, particularly journalistic styles, a paragraph can be just one sentence long."
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_FETCH_URL}/ai/direction`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ prompt: direction }),
+      }
     );
 
-    // Generate a direction
+    if (!res.ok) {
+      throw new Error("Failed fetching data");
+    }
+
+    const directionValue = await res.json();
+
+    setDirectionValue(directionValue);
+
     setIsGeneratingHelp(false);
   };
 
@@ -113,14 +320,35 @@ const Map = ({ stories }: { stories: StoryProps[] }) => {
   const handleNeedHelp = async (e: any) => {
     e.preventDefault();
 
+    if (isGenerating) return;
+
     setIsGeneratingHelp(true);
-    // Generate a story idea
 
-    await new Promise((resolve) => setTimeout(resolve, 2000));
+    const res = await fetch(`${process.env.NEXT_PUBLIC_FETCH_URL}/ai/idea`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
 
-    // Set the story idea to the textbox
+    if (!res.ok) {
+      throw new Error("Failed fetching data");
+    }
+
+    const idea = await res.json();
+
+    setDirectionValue(idea);
+
     setIsGeneratingHelp(false);
   };
+
+  // Clear inputs on change
+  useEffect(() => {
+    if (!isGenerating) {
+      setDirection("");
+      setDirectionValue("");
+    }
+  }, [topic, isGenerating]);
 
   return isLoaded ? (
     <main className="relative h-full w-full overflow-y-auto">
@@ -169,7 +397,7 @@ const Map = ({ stories }: { stories: StoryProps[] }) => {
             <p className="text-h3 font-bold text-white drop-shadow-xl">
               {!session
                 ? "Log in to start envisioning the future"
-                : "Start envisioning the future by clicking on a location you want to reenvision"}
+                : "Start envisioning the future by clicking on a location you want to envision"}
             </p>
           </div>
         )}
@@ -226,7 +454,7 @@ const Map = ({ stories }: { stories: StoryProps[] }) => {
                         ? "bg-gray-dark text-white"
                         : "bg-gray"
                     }`}>
-                    Only a direction
+                    Help me choose
                   </Button>
                   <Button
                     noY
@@ -236,7 +464,7 @@ const Map = ({ stories }: { stories: StoryProps[] }) => {
                         ? "bg-gray-dark text-white"
                         : "bg-gray"
                     }`}>
-                    Help me choose
+                    Choose for me
                   </Button>
                 </div>
               </div>
@@ -244,23 +472,26 @@ const Map = ({ stories }: { stories: StoryProps[] }) => {
               {/* Topic pane */}
               <div className="-mt-[1em] w-full">
                 {topic === "hasTopic" ? (
-                  <div className="mb-[2.5em] flex w-full justify-center">
-                    <p className="text-body italic">
-                      Great, let me know if you need any help later on.
-                    </p>
-                  </div>
-                ) : // Has direction
-                topic === "hasDirection" ? (
-                  <div className="flex w-full flex-col items-center gap-[2.5em]">
-                    <p className="text-body italic">
-                      What direction are you thinking of? Maybe I can help!
-                    </p>
+                  <div className="mb-[2.5em] flex w-full flex-col items-center justify-center gap-[2.5em]">
                     <div className="flex w-full items-center justify-between gap-[1em]">
                       <input
                         className="w-full rounded-md border border-gray p-[1em]"
                         value={directionValue}
                         onChange={(e) => setDirectionValue(e.target.value)}
-                        placeholder="Describe a topic for your vision for the future"
+                        placeholder="Fill in a topic for your vision for the future"
+                        name="direction"
+                      />
+                    </div>
+                  </div>
+                ) : // Has direction
+                topic === "hasDirection" ? (
+                  <div className="mb-[2.5em] flex w-full flex-col items-center gap-[2.5em]">
+                    <div className="flex w-full items-center justify-between gap-[1em]">
+                      <input
+                        className="w-full rounded-md border border-gray p-[1em]"
+                        value={direction}
+                        onChange={(e) => setDirection(e.target.value)}
+                        placeholder="Describe a direction for your vision for the future"
                         name="direction"
                       />
                       <Button
@@ -274,9 +505,9 @@ const Map = ({ stories }: { stories: StoryProps[] }) => {
                         </span>
                       </Button>
                     </div>
-                    {direction !== "" && (
+                    {directionValue !== "" && (
                       <div className="mb-[2.5em] flex w-full flex-col items-center rounded-md bg-gray p-[2em]">
-                        {direction}
+                        {directionValue}
                       </div>
                     )}
                   </div>
@@ -284,8 +515,8 @@ const Map = ({ stories }: { stories: StoryProps[] }) => {
                 topic === "needsHelp" ? (
                   <div className="relative mb-[2.5em] flex w-full justify-center rounded-md bg-gray p-[2em]">
                     <p id="need-help" className="text-body">
-                      {storyIdea !== "" ? (
-                        storyIdea
+                      {directionValue !== "" ? (
+                        directionValue
                       ) : (
                         <em>Start generating an idea</em>
                       )}
@@ -311,7 +542,7 @@ const Map = ({ stories }: { stories: StoryProps[] }) => {
                 <h2 className="text-h2 font-bold">
                   Do you already have a topic in mind?
                 </h2>
-                <div className="flex justify-between rounded-md bg-gray">
+                <div className="flex justify-between gap-1 rounded-md bg-gray">
                   <Button
                     noY
                     onClick={() => setAssistance("noAssistance")}
@@ -345,13 +576,17 @@ const Map = ({ stories }: { stories: StoryProps[] }) => {
                 </div>
               </div>
 
-              {/* Assistance pane */}
-              <div className="-mt-[1em]">
-                <p>x</p>
-              </div>
-
               {/* Generate button */}
-              <Button onClick={(e) => handleStoryForm(e)}>Start writing</Button>
+              <Button onClick={(e) => handleStoryForm(e)}>
+                <div className="flex items-center gap-1">
+                  Start writing
+                  {isGenerating && (
+                    <span className="material-symbols-rounded animate-spin">
+                      autorenew
+                    </span>
+                  )}
+                </div>
+              </Button>
             </div>
           </div>
         </motion.aside>

@@ -73,6 +73,7 @@ model Story {
   imageUrl  String
   longitude Float
   latitude  Float
+  published Boolean   @default(false)
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
   version   Int       @default(1)

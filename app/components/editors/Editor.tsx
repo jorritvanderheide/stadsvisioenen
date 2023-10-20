@@ -1,8 +1,5 @@
 // Editor component
 
-// Key features:
-// - Rich text editing
-
 "use client";
 
 // Imports
@@ -17,7 +14,8 @@ import { supabase } from "@/app/lib/supabase/supabase";
 import { decode } from "base64-arraybuffer";
 import type { StoryProps } from "@/app/types/global.t";
 import "react-quill/dist/quill.snow.css";
-import AnimatedLink from "../buttons/AnimatedLink";
+import Button from "@/app/components/buttons/Button";
+import AnimatedLink from "@/app/components/buttons/AnimatedLink";
 
 const ReactQuill = dynamic(() => import("react-quill"), { ssr: false });
 
@@ -34,7 +32,7 @@ const Editor: React.FC = () => {
   const [randomId, setRandomId] = useState<string>();
   const [title, setTitle] = useState("Title");
   const [content, setContent] = useState("Content");
-  const [imageUrl, setImageUrl] = useState("");
+  const [imageUrl, setImageUrl] = useState("/images/placeholder.svg");
   const [isGenerating, setIsGenerating] = useState(false);
 
   // Fetch story if editing existing
@@ -65,11 +63,9 @@ const Editor: React.FC = () => {
     if (id !== undefined) {
       getStory();
     } else {
-      if (!randomId) {
-        setRandomId(createId());
-      }
+      setRandomId(createId());
     }
-  }, [id, randomId]);
+  }, [id]);
 
   // Check for profanity
   const checkProfanity = () => {
@@ -129,6 +125,8 @@ const Editor: React.FC = () => {
       return;
     }
 
+    setIsGenerating(true);
+
     const cleanString = content
       .replace(/(<([^>]+)>)/gi, "")
       .replaceAll("\\s+", " ")
@@ -136,7 +134,6 @@ const Editor: React.FC = () => {
 
     const description = await getDescription(cleanString);
 
-    setIsGenerating(true);
     const res = await fetch(
       `${process.env.NEXT_PUBLIC_FETCH_URL}/stories/images`,
       {
@@ -167,6 +164,11 @@ const Editor: React.FC = () => {
       return;
     }
 
+    if (imageUrl === "/images/placeholder.svg" || imageUrl === "") {
+      alert("please generate a cover image first");
+      return;
+    }
+
     const res = await fetch(`${process.env.NEXT_PUBLIC_FETCH_URL}/stories`, {
       method: "POST",
       body: JSON.stringify({
@@ -176,6 +178,7 @@ const Editor: React.FC = () => {
         imageUrl: imageUrl,
         longitude: longitude,
         latitude: latitude,
+        published: true,
       }),
     });
 
@@ -202,6 +205,7 @@ const Editor: React.FC = () => {
         title: title,
         content: content,
         imageUrl: imageUrl,
+        published: true,
       }),
     });
 
@@ -215,11 +219,11 @@ const Editor: React.FC = () => {
   };
 
   return (
-    <div className="w-full flex flex-col items-center p-[10vw]">
-      <div className="relative w-prose flex flex-col items-center gap-[2.5em]">
-        <div className="absolute top-0 left-0">
+    <div className="flex w-full flex-col items-center p-[10vw]">
+      <div className="relative flex w-prose flex-col items-center gap-[2.5em]">
+        <div className="absolute left-0 top-0">
           <AnimatedLink>
-            <Link href={`/read/${id}`}>
+            <Link href={id ? `/read/${id}` : `/`}>
               <span className="material-symbols-rounded">arrow_back</span>
             </Link>
           </AnimatedLink>
@@ -227,20 +231,20 @@ const Editor: React.FC = () => {
         <div className=" relative w-1/2">
           {imageUrl !== "" ? (
             <Image
-              className="rounded-xl"
+              className="rounded-xl shadow-xl"
               src={imageUrl}
               width={1024}
               height={1024}
               alt="image"
             />
           ) : (
-            <div className="bg-gray aspect-square rounded-xl"></div>
+            <div className="aspect-square rounded-xl bg-gray"></div>
           )}
           <div className="absolute -bottom-[2em] -right-[2em]">
             <AnimatedLink>
               <button
                 onClick={generateImage}
-                className="m-[1em] w-[3em] h-[3em] bg-gray rounded-full flex items-center justify-center shadow-md">
+                className="m-[1em] flex h-[3em] w-[3em] items-center justify-center rounded-full bg-gray shadow-md">
                 <span
                   className={`material-symbols-rounded ${
                     isGenerating && "animate-spin"
@@ -252,7 +256,7 @@ const Editor: React.FC = () => {
           </div>
         </div>
         <input
-          className="border-b-2 border-black text-h1 font-bold pb-[0.5em] border-dotted flex items-center justify-center w-full text-center outline-none"
+          className="flex w-full items-center justify-center border-b-2 border-dotted border-black pb-[0.5em] text-center text-h1 font-bold outline-none"
           type="text"
           value={title}
           onChange={(e) => setTitle(e.target.value)}
@@ -265,15 +269,9 @@ const Editor: React.FC = () => {
         />
         <AnimatedLink>
           {story ? (
-            <button
-              className="bg-gray rounded-md py-[0.25em] px-[0.45em]"
-              onClick={handlePut}>
-              Update story
-            </button>
+            <Button onClick={handlePut}>Update story</Button>
           ) : (
-            <button className="" onClick={handlePost}>
-              Save story
-            </button>
+            <Button onClick={handlePost}>Save story</Button>
           )}
         </AnimatedLink>
       </div>

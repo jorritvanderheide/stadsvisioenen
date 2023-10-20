@@ -1,17 +1,11 @@
-// Home page: The primary landing page for users, showing a map view of the city they are in with nearby stories.
-
-// Key features:
-// - Map view of the city
-// - List of nearby stories
-
-// Imports
+"use client";
 
 import Header from "@/app/components/bars/Header";
 import Map from "@/app/components/maps/Map";
 import { StoryProps } from "@/app/types/global.t";
 import { NextPage } from "next";
-
-//
+import { useState, useEffect } from "react";
+// Fetch stories
 async function getStories() {
   const res = await fetch(`${process.env.NEXT_PUBLIC_FETCH_URL}/stories`, {
     method: "GET",
@@ -27,14 +21,18 @@ async function getStories() {
 }
 
 // Export default
-const Home: NextPage = async () => {
-  const stories: StoryProps[] = await getStories();
+const Home: NextPage = () => {
+  const [stories, setStories] = useState<StoryProps[]>();
+
+  useEffect(() => {
+    getStories().then((data) => setStories(data));
+  }, []);
 
   return (
     <>
       <main className="h-[100svh] w-full overflow-hidden">
         <Header />
-        <Map stories={stories} />
+        <Map stories={stories!} />
       </main>
     </>
   );

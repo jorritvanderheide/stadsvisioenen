@@ -44,7 +44,7 @@ const Signin: FunctionComponent = () => {
       </AnimatedLink>
       <Image
         className="absolute left-0 top-0 z-[-1] h-full w-full object-cover opacity-80 blur-sm brightness-90"
-        src="/images/signin.webp"
+        src="/images/sign-in.webp"
         height={1180}
         width={1578}
         alt="Background image for the SignIn page"

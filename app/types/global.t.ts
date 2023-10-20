@@ -26,6 +26,7 @@ export interface StoryProps {
   imageUrl: string;
   longitude: number;
   latitude: number;
+  published: boolean;
   createdAt: Date;
   updatedAt: Date;
   rating?: number | null;

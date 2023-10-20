@@ -27,7 +27,13 @@ export const GET = async (request: NextRequest): Promise<Response> => {
     }
   } else {
     try {
-      const res = await prisma.story.findMany();
+      const res = await prisma.story.findMany({
+        take: 50,
+        where: { published: true },
+        orderBy: {
+          updatedAt: "asc",
+        },
+      });
 
       return Response.json(res);
     } catch (error) {
@@ -43,7 +49,7 @@ export const GET = async (request: NextRequest): Promise<Response> => {
  * @param {string} request.imageUrl - Story image url
  * @param {number} request.longitude - Story longitude
  * @param {number} request.latitude - Story latitude
- * @param {boolean} request.published - Story published status
+ * @param {boolean} request.published - Story published
  *
  * @returns {Promise<Response>} - Response object
  */
@@ -69,11 +75,13 @@ export const POST = async (request: NextRequest): Promise<Response> => {
         imageUrl: imageUrl,
         longitude: longitude,
         latitude: latitude,
+        published: published,
       },
     });
 
     return Response.json(res);
   } catch (error) {
+    console.log(error);
     return Response.json(error);
   }
 };
@@ -84,7 +92,6 @@ export const POST = async (request: NextRequest): Promise<Response> => {
  * @param {string} request.title - Story title
  * @param {string} request.content - Story content
  * @param {string} request.imageUrl - Story image url
- * @param {boolean} request.published - Story published status
  *
  * @returns {Promise<Response>} - Response object
  */
@@ -111,6 +118,7 @@ export const PUT = async (request: NextRequest): Promise<Response> => {
         title: title,
         content: content,
         imageUrl: imageUrl,
+        published: published,
         version: {
           increment: 1,
         },
