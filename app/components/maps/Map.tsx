@@ -357,9 +357,9 @@ const Map = ({ stories }: { stories: StoryProps[] }) => {
     }
   }, [topic, isGenerating]);
 
-  useEffect(() => {
-    router.refresh();
-  }, [router]);
+  // useEffect(() => {
+  //   router.refresh();
+  // }, [router]);
 
   return isLoaded ? (
     <main className="relative h-full w-full overflow-y-auto">
