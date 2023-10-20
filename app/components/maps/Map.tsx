@@ -342,6 +342,11 @@ const Map = ({ stories }: { stories: StoryProps[] }) => {
     setIsGeneratingHelp(false);
   };
 
+  // Get session
+  useEffect(() => {
+    console.log(session);
+  }, [session]);
+
   // Clear inputs on change
   useEffect(() => {
     if (!isGenerating) {
@@ -394,7 +399,7 @@ const Map = ({ stories }: { stories: StoryProps[] }) => {
         </GoogleMap>
         {!isCreating && (
           <div className="absolute bottom-[5em] left-0 flex w-full justify-center">
-            <p className="text-h3 font-bold text-white drop-shadow-xl">
+            <p className="px-[6vw] text-center text-h3 font-bold text-white drop-shadow-xl">
               {!session
                 ? "Log in to start envisioning the future"
                 : "Start envisioning the future by clicking on a location you want to envision"}
@@ -475,7 +480,7 @@ const Map = ({ stories }: { stories: StoryProps[] }) => {
                   <div className="mb-[2.5em] flex w-full flex-col items-center justify-center gap-[2.5em]">
                     <div className="flex w-full items-center justify-between gap-[1em]">
                       <input
-                        className="w-full rounded-md border border-gray p-[1em]"
+                        className="w-full rounded-md border border-gray p-[1em] focus:border-gray-dark"
                         value={directionValue}
                         onChange={(e) => setDirectionValue(e.target.value)}
                         placeholder="Fill in a topic for your vision for the future"
@@ -488,7 +493,7 @@ const Map = ({ stories }: { stories: StoryProps[] }) => {
                   <div className="mb-[2.5em] flex w-full flex-col items-center gap-[2.5em]">
                     <div className="flex w-full items-center justify-between gap-[1em]">
                       <input
-                        className="w-full rounded-md border border-gray-dark p-[1em]"
+                        className="w-full rounded-md border border-gray p-[1em] focus:!border-gray-dark"
                         value={direction}
                         onChange={(e) => setDirection(e.target.value)}
                         placeholder="Describe a direction for your vision for the future"

@@ -24,7 +24,7 @@ const getComments = async (id: string) => {
   return res.json();
 };
 
-const CommentsSetion = async ({
+const CommentsSection = async ({
   id,
   imageUrl,
 }: {
@@ -36,31 +36,31 @@ const CommentsSetion = async ({
 
   return (
     <section id="comments">
-      <div className="bg-white p-[7.5vh] w-full justify-center flex border-t-[1px] border-gray rounded-b-2xl">
-        <div className="flex flex-col items-center gap-[2.5em]">
+      <div className="flex w-full justify-center rounded-b-2xl border-t-[1px] border-gray bg-white p-[7.5vh]">
+        <div className="flex w-full flex-col items-center gap-[2.5em]">
           <h2 className="text-h2 font-bold">Comments</h2>
           {comments.length > 0 ? (
             comments?.map((comment) => (
               <CommentCard key={comment.id} {...comment} />
             ))
           ) : (
-            <p className="text-gray italic">No comments yet</p>
+            <p className="italic text-gray">No comments yet</p>
           )}
         </div>
       </div>
-      <div className="relative w-screen p-[7.5vh] -mb-[7.5vh] flex justify-center">
+      <div className="relative -mb-[7.5vh] flex w-screen justify-center p-[7.5vh]">
         <Image
-          className="absolute bottom-0 left-0 blur-2xl opacity-80 z-[-1] w-full object-cover"
+          className="absolute bottom-0 left-0 z-[-1] w-full object-cover opacity-80 blur-2xl"
           src={imageUrl}
           width={1024}
           height={1024}
           alt={`Blurred background`}
         />
-        <div className="w-prose flex justify-center">
+        <div className="flex w-full max-w-prose justify-center">
           {session ? (
             <CommentForm id={id} />
           ) : (
-            <p className="text-white italic">
+            <p className="italic text-white">
               You must be logged in to write a comment
             </p>
           )}
@@ -70,4 +70,4 @@ const CommentsSetion = async ({
   );
 };
 
-export default CommentsSetion;
+export default CommentsSection;

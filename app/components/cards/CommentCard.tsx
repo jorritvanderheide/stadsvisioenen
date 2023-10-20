@@ -40,17 +40,17 @@ const CommentCard: React.FC<CommentProps> = async (comment) => {
   }
 
   return (
-    <article className="comment">
-      <div className="flex gap-[2.5em] w-prose">
+    <article className="comment w-full max-w-prose">
+      <div className="flex w-full max-w-prose gap-[2.5em]">
         <Image
-          className="w-[4em] h-[4em] rounded-full"
-          src={comment.user.image}
+          className="h-[4em] w-[4em] rounded-full"
+          src={comment.user.image} // TODO - include google image
           width={460}
           height={460}
           alt={`Profile image for ${comment.user.name}`}
         />
-        <div className="mt-[0.75em] flex flex-col gap-[1em] text-body w-full">
-          <div className="flex justify-between items-center">
+        <div className="mt-[0.75em] flex w-full flex-col gap-[1em] text-body">
+          <div className="flex w-full items-center justify-between">
             <header>
               <h3 className="text-h3 font-semibold">{comment.user.name}</h3>
               <p>{`${timeSince(new Date(comment.createdAt))} ago`}</p>

@@ -18,9 +18,9 @@ const StorySection: React.FC<StorySectionProps> = ({
         height={1024}
         alt={`Blurred background for ${title}`}
       />
-      <article className="mt-[55vh] flex flex-col items-center gap-[5em] rounded-t-2xl bg-white p-[7.5vh]">
+      <article className="mt-[66vw] flex flex-col items-center gap-[5em] rounded-t-2xl bg-white p-[7.5vh] sm:mt-[50vh]">
         <Image
-          className="-mt-prose aspect-auto w-prose rounded-xl"
+          className="-mt-[50vw] aspect-auto w-[66vw] rounded-xl sm:-mt-[40vh] lg:w-prose"
           src={imageUrl}
           width={1024}
           height={1024}
@@ -34,7 +34,7 @@ const StorySection: React.FC<StorySectionProps> = ({
           </div>
           <div
             id="story-content"
-            className="w-prose text-body"
+            className="max-w-prose text-body"
             dangerouslySetInnerHTML={{ __html: content }}
           />
         </div>

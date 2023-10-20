@@ -59,7 +59,7 @@ const CommentForm = ({ id }: { id: string }) => {
       onSubmit={onSubmit}
       className="flex w-full items-center gap-[2.5em]">
       <input
-        className="w-full rounded-md border border-gray-dark p-[1em]"
+        className="w-full rounded-md border border-gray p-[1em] focus:border-gray-dark"
         type="text"
         name="content"
         placeholder="Add a comment"
