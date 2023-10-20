@@ -3,7 +3,7 @@ import Map from "@/app/components/maps/Map";
 import { NextPage } from "next";
 
 // Fetch stories
-const getStories = async () => {
+async function getData() {
   const res = await fetch(`${process.env.NEXT_PUBLIC_FETCH_URL}/stories/all`, {
     method: "GET",
     headers: { "Content-Type": "application/json" },
@@ -14,20 +14,20 @@ const getStories = async () => {
   }
 
   return res.json();
-};
+}
 
 // Export default
-const Home: NextPage = async () => {
-  const stories = (await getStories()) || null;
+export default async function Home() {
+  const data = await getData();
+
+  console.log(data);
 
   return (
     <>
       <main className="h-[100svh] w-full overflow-hidden">
         <Header />
-        {stories && <Map stories={stories} />}
+        {/* {data && <Map stories={data} />} */}
       </main>
     </>
   );
-};
-
-export default Home;
+}
