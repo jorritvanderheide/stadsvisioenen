@@ -6,14 +6,7 @@ import { useMemo, useState, useRef, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
 import { AnimatePresence, delay, motion } from "framer-motion";
-import {
-  useLoadScript,
-  GoogleMap,
-  MarkerF,
-  Marker,
-  MarkerClusterer,
-  MarkerClustererF,
-} from "@react-google-maps/api";
+import { useLoadScript, GoogleMap, MarkerF } from "@react-google-maps/api";
 import { StoryProps, TempMarkerProps } from "@/app/types/global.t";
 import Button from "@/app/components/buttons/Button";
 import AnimatedLink from "@/app/components/buttons/AnimatedLink";

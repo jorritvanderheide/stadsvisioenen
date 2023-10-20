@@ -1,8 +1,7 @@
 import Header from "@/app/components/bars/Header";
 import Map from "@/app/components/maps/Map";
-import { StoryProps } from "@/app/types/global.t";
 import { NextPage } from "next";
-import { useState, useEffect } from "react";
+
 // Fetch stories
 async function getStories() {
   const res = await fetch(`${process.env.NEXT_PUBLIC_FETCH_URL}/stories`, {
@@ -26,7 +25,7 @@ const Home: NextPage = async () => {
     <>
       <main className="h-[100svh] w-full overflow-hidden">
         <Header />
-        <Map stories={stories!} />
+        {stories && <Map stories={stories} />}
       </main>
     </>
   );
