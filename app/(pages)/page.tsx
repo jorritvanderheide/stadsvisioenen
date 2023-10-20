@@ -2,12 +2,13 @@ import Header from "@/app/components/bars/Header";
 import Map from "@/app/components/maps/Map";
 import { NextPage } from "next";
 import type { StoryProps } from "@/app/types/global.t";
+import { Suspense } from "react";
+import "server-only";
 
 // Fetch stories
-async function getStories() {
+const getStories = async () => {
   const res = await fetch(`${process.env.NEXT_PUBLIC_FETCH_URL}/stories`, {
     method: "GET",
-    headers: { "Content-Type": "application/json" },
     next: {
       revalidate: 0,
     },
@@ -18,7 +19,7 @@ async function getStories() {
   }
 
   return res.json();
-}
+};
 
 // Export default
 const Home: NextPage = async () => {
@@ -28,7 +29,9 @@ const Home: NextPage = async () => {
     <>
       <main className="h-[100svh] w-full overflow-hidden">
         <Header />
-        <Map stories={stories!} />
+        <Suspense fallback={<div>Loading...</div>}>
+          <Map stories={stories!} />
+        </Suspense>
       </main>
     </>
   );
