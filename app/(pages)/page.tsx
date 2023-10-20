@@ -25,14 +25,7 @@ const Home: NextPage = async () => {
     <>
       <main className="h-[100svh] w-full overflow-hidden">
         <Header />
-        <Suspense
-          fallback={
-            <div className="flex h-full w-full items-center justify-center">
-              <h1 className="text-h1 font-bold">Loading...</h1>
-            </div>
-          }>
-          <Map stories={stories} />
-        </Suspense>
+        <Map stories={stories} />
       </main>
     </>
   );

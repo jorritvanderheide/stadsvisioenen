@@ -219,27 +219,24 @@ const Editor: React.FC = () => {
   };
 
   return (
-    <div className="flex w-full flex-col items-center p-[10vw]">
-      <div className="relative flex w-prose flex-col items-center gap-[2.5em]">
-        <div className="absolute left-0 top-0">
-          <AnimatedLink>
-            <Link href={id ? `/read/${id}` : `/`}>
-              <span className="material-symbols-rounded">arrow_back</span>
-            </Link>
-          </AnimatedLink>
-        </div>
-        <div className=" relative w-1/2">
-          {imageUrl !== "" ? (
-            <Image
-              className="rounded-xl shadow-xl"
-              src={imageUrl}
-              width={1024}
-              height={1024}
-              alt="image"
-            />
-          ) : (
-            <div className="aspect-square rounded-xl bg-gray"></div>
-          )}
+    <div className="flex w-full flex-col items-center">
+      <Image
+        className="absolute left-0 top-0 z-[-1] max-h-screen w-full object-cover opacity-80 blur-2xl"
+        src={imageUrl}
+        width={1024}
+        height={1024}
+        alt={`Blurred background for ${title}`}
+      />
+      <article className="mt-[66vw] flex w-full flex-col items-center gap-[5em] rounded-t-2xl bg-white p-[7.5vh] sm:mt-[50vh]">
+        <div className=" relative">
+          <Image
+            className="-mt-[50vw] aspect-auto w-[66vw] rounded-xl sm:-mt-[40vh] lg:w-prose"
+            src={imageUrl}
+            width={1024}
+            height={1024}
+            alt={`Cover image for ${title}`}
+            priority
+          />
           <div className="absolute -bottom-[2em] -right-[2em]">
             <AnimatedLink>
               <button
@@ -255,26 +252,28 @@ const Editor: React.FC = () => {
             </AnimatedLink>
           </div>
         </div>
-        <input
-          className="flex w-full items-center justify-center border-b-2 border-dotted border-gray pb-[0.5em] text-center text-h1 font-bold outline-none focus:border-gray-dark"
-          type="text"
-          value={title}
-          onChange={(e) => setTitle(e.target.value)}
-        />
-        <ReactQuill
-          theme="snow"
-          value={content}
-          onChange={setContent}
-          className="w-full"
-        />
-        <AnimatedLink>
-          {story ? (
-            <Button onClick={handlePut}>Update story</Button>
-          ) : (
-            <Button onClick={handlePost}>Save story</Button>
-          )}
-        </AnimatedLink>
-      </div>
+        <div className="flex w-full max-w-prose flex-col items-center gap-[5em]">
+          <input
+            className="flex w-full items-center justify-center border-b-2 border-dotted border-gray pb-[0.5em] text-center text-h1 font-bold outline-none focus:border-gray-dark"
+            type="text"
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
+          />
+          <ReactQuill
+            theme="snow"
+            value={content}
+            onChange={setContent}
+            className="w-full"
+          />
+          <AnimatedLink>
+            {story ? (
+              <Button onClick={handlePut}>Update story</Button>
+            ) : (
+              <Button onClick={handlePost}>Save story</Button>
+            )}
+          </AnimatedLink>
+        </div>
+      </article>
     </div>
   );
 };

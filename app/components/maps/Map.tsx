@@ -16,6 +16,8 @@ import { decode } from "base64-arraybuffer";
 import { supabase } from "@/app/lib/supabase/supabase";
 
 const Map = ({ stories }: { stories: StoryProps[] }) => {
+  console.log(stories);
+
   const ref = useRef(null);
   const router = useRouter();
   const mapCenter = useMemo(() => ({ lat: 51.4480315, lng: 5.4587816 }), []);
@@ -349,10 +351,6 @@ const Map = ({ stories }: { stories: StoryProps[] }) => {
       setDirectionValue("");
     }
   }, [topic, isGenerating]);
-
-  // useEffect(() => {
-  //   router.refresh();
-  // }, [router]);
 
   return isLoaded ? (
     <main className="relative h-full w-full overflow-y-auto">
