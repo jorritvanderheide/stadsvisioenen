@@ -342,11 +342,6 @@ const Map = ({ stories }: { stories: StoryProps[] }) => {
     setIsGeneratingHelp(false);
   };
 
-  // Get session
-  useEffect(() => {
-    console.log(session);
-  }, [session]);
-
   // Clear inputs on change
   useEffect(() => {
     if (!isGenerating) {

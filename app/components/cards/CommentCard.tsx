@@ -44,7 +44,7 @@ const CommentCard: React.FC<CommentProps> = async (comment) => {
       <div className="flex w-full max-w-prose gap-[2.5em]">
         <Image
           className="h-[4em] w-[4em] rounded-full"
-          src={comment.user.image} // TODO - include google image
+          src={comment.user.image}
           width={460}
           height={460}
           alt={`Profile image for ${comment.user.name}`}
