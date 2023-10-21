@@ -27,6 +27,7 @@ const Map = ({ stories }: { stories: StoryProps[] }) => {
   const [map, setMap] = useState<GoogleMap>(undefined as unknown as GoogleMap);
   const [tempMarker, setTempMarker] = useState<TempMarkerProps>();
   const { data: session } = useSession();
+  const [logger, setLogger] = useState<string>("");
 
   // New Story Variables
   const [isCreating, setIsCreating] = useState(false);
@@ -65,7 +66,7 @@ const Map = ({ stories }: { stories: StoryProps[] }) => {
 
   // Create a new story
   const newStory = async (e: any) => {
-    // if (!session) return;
+    if (!session) return;
 
     // Set the temp marker
     setTempMarker({
@@ -132,6 +133,8 @@ const Map = ({ stories }: { stories: StoryProps[] }) => {
 
   // Upload image to supabase
   const uploadImage = async (image: string) => {
+    setLogger("Uploading image");
+
     const filename = `public/${randomId}.webp?${new Date().getTime()}`;
     const { data, error } = await supabase.storage
       .from("story-covers")
@@ -156,7 +159,11 @@ const Map = ({ stories }: { stories: StoryProps[] }) => {
 
   // Generate image from description
   const generateImage = async (generatedStory: string) => {
+    setLogger("Generating image description");
+
     const description = await getDescription(generatedStory);
+
+    setLogger("Generating image");
 
     const res = await fetch(
       `${process.env.NEXT_PUBLIC_FETCH_URL}/api/stories/images`,
@@ -186,6 +193,8 @@ const Map = ({ stories }: { stories: StoryProps[] }) => {
   const handleUpload = async (generatedStory: string) => {
     if (!session) return;
 
+    setLogger("Checking content");
+
     if (checkProfanity(generatedStory)) {
       alert("Profanity detected");
       return;
@@ -209,6 +218,8 @@ const Map = ({ stories }: { stories: StoryProps[] }) => {
       .toString()
       .replace(/,/g, "<p></p>")
       .replace(/&&]/g, ",");
+
+    setLogger("Uploading story");
 
     const res = await fetch(
       `${process.env.NEXT_PUBLIC_FETCH_URL}/api/stories`,
@@ -248,6 +259,8 @@ const Map = ({ stories }: { stories: StoryProps[] }) => {
         `/write?lng=${tempMarker?.longitude}&lat=${tempMarker?.latitude}`
       );
     } else {
+      setLogger("Generating story");
+
       if (assistance === "helpStart") {
         const response = await openai.chat.completions.create({
           model: "gpt-4",
@@ -615,17 +628,22 @@ const Map = ({ stories }: { stories: StoryProps[] }) => {
                   </div>
                 </div>
 
-                {/* Generate button */}
-                <Button onClick={(e) => handleStoryForm(e)}>
-                  <div className="flex items-center gap-1">
-                    Start writing
-                    {isGenerating && (
-                      <span className="material-symbols-rounded animate-spin">
-                        autorenew
-                      </span>
-                    )}
-                  </div>
-                </Button>
+                <div className="flex flex-col items-center gap-[2.5vh]">
+                  {/* Generate button */}
+                  <Button onClick={(e) => handleStoryForm(e)}>
+                    <div className="flex items-center gap-1">
+                      Start writing
+                      {isGenerating && (
+                        <span className="material-symbols-rounded animate-spin">
+                          autorenew
+                        </span>
+                      )}
+                    </div>
+                  </Button>
+                  <p className="animate-pulse text-body italic">
+                    {logger !== "" && logger}
+                  </p>
+                </div>
               </div>
             </div>
           </div>
