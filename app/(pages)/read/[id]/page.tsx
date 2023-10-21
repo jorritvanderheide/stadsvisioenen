@@ -45,7 +45,8 @@ async function getStory(id: string) {
 }
 
 // Multiple versions of this page will be statically generated using the `params` returned by `generateStaticParams`
-const Read = async ({ params }: { params: { id: string } }) => {
+const Read = async (props: any) => {
+  const { params }: { params: { id: string } } = props;
   const session: SessionProps | null = await getServerSession(authOptions)!;
   const story: StoryProps = await getStory(params.id);
 
