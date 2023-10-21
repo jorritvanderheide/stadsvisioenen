@@ -8,7 +8,7 @@ import { useState, useEffect } from "react";
 
 // Fetch stories
 async function getStories() {
-  const res = await fetch(`/api/stories`, {
+  const res = await fetch(`${process.env.NEXT_PUBLIC_FETCH_URL}/api/stories`, {
     method: "GET",
     headers: { "Content-Type": "application/json" },
   });

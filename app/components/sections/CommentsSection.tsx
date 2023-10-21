@@ -9,10 +9,13 @@ import type { CommentProps } from "@/app/types/global.t";
 
 // Fetches the comments for a story
 const getComments = async (id: string) => {
-  const res = await fetch(`/api/stories/comments?id=${id}`, {
-    method: "GET",
-    headers: { "Content-Type": "application/json" },
-  });
+  const res = await fetch(
+    `${process.env.NEXT_PUBLIC_FETCH_URL}/api/stories/comments?id=${id}`,
+    {
+      method: "GET",
+      headers: { "Content-Type": "application/json" },
+    }
+  );
 
   if (!res.ok) {
     throw new Error("Failed to fetch data");

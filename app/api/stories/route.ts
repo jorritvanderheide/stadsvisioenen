@@ -3,7 +3,7 @@ import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 import prisma from "@/app/lib/prisma/prisma";
 import type { NextRequest } from "next/server";
 import type { NextAuthOptions } from "next-auth";
-import type { StoryProps, SessionProps } from "@/app/types/global.t";
+import type { SessionProps } from "@/app/types/global.t";
 
 /**
  * Handle get request
@@ -12,40 +12,24 @@ import type { StoryProps, SessionProps } from "@/app/types/global.t";
  * @returns {Promise<Response>} - Story object or array of story objects
  */
 export const GET = async (request: NextRequest): Promise<Response> => {
-  const searchParams = request.nextUrl.searchParams;
-  const id = searchParams.get("id");
+  try {
+    const res = await prisma.story.findMany({
+      take: 50,
+      where: { published: true },
+      orderBy: {
+        updatedAt: "asc",
+      },
+      select: {
+        id: true,
+        imageUrl: true,
+        longitude: true,
+        latitude: true,
+      },
+    });
 
-  if (id) {
-    try {
-      const res = await prisma.story.findUnique({
-        where: { id: id },
-        include: { user: true },
-      });
-      return Response.json(res);
-    } catch (error) {
-      return Response.json(error);
-    }
-  } else {
-    try {
-      const res = await prisma.story.findMany({
-        take: 50,
-        where: { published: true },
-        orderBy: {
-          updatedAt: "asc",
-        },
-        select: {
-          id: true,
-          imageUrl: true,
-          longitude: true,
-          latitude: true,
-        },
-      });
-
-      return Response.json(res);
-    } catch (error) {
-      console.log(error);
-      return Response.json(error);
-    }
+    return Response.json(res);
+  } catch (error) {
+    return Response.json(error);
   }
 };
 

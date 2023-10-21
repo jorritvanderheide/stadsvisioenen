@@ -24,10 +24,13 @@ const CommentControls: React.FC<{ id: string }> = ({ id }) => {
     );
 
     if (confirm) {
-      const res = await fetch(`/api/stories/comments?id=${id}`, {
-        method: "DELETE",
-        headers: { "Content-Type": "application/json" },
-      });
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_FETCH_URL}/api/stories/comments?id=${id}`,
+        {
+          method: "DELETE",
+          headers: { "Content-Type": "application/json" },
+        }
+      );
       if (!res.ok) {
         throw new Error("Failed to fetch data");
       } else {

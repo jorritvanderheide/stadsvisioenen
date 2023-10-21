@@ -29,10 +29,13 @@ import AnimatedLink from "@/app/components/buttons/AnimatedLink";
 
 // Fetches props for a single story
 async function getStory(id: string) {
-  const res = await fetch(`/api/stories?id=${id}`, {
-    method: "GET",
-    headers: { "Content-Type": "application/json" },
-  });
+  const res = await fetch(
+    `${process.env.NEXT_PUBLIC_FETCH_URL}/api/stories/id?id=${id}`,
+    {
+      method: "GET",
+      headers: { "Content-Type": "application/json" },
+    }
+  );
 
   if (!res.ok) {
     throw new Error("Failed to fetch data");

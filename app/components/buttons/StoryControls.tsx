@@ -26,10 +26,13 @@ const StoryControls: React.FC<{ id: string; story: StoryProps }> = ({
     );
 
     if (confirm) {
-      const res = await fetch(`/api/stories?id=${id}`, {
-        method: "DELETE",
-        headers: { "Content-Type": "application/json" },
-      });
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_FETCH_URL}/api/stories?id=${id}`,
+        {
+          method: "DELETE",
+          headers: { "Content-Type": "application/json" },
+        }
+      );
       if (!res.ok) {
         throw new Error("Failed to fetch data");
       } else {
