@@ -99,7 +99,7 @@ const Map = ({ stories }: { stories: StoryProps[] }) => {
   // Generate image description from story content
   const getDescription = async (content: string) => {
     const res = await fetch(
-      `${process.env.NEXT_PUBLIC_VERCEL_URL}/stories/images/descriptions`,
+      `${process.env.NEXT_PUBLIC_VERCEL_URL}/api/stories/images/descriptions`,
       {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -147,7 +147,7 @@ const Map = ({ stories }: { stories: StoryProps[] }) => {
     const description = await getDescription(generatedStory);
 
     const res = await fetch(
-      `${process.env.NEXT_PUBLIC_VERCEL_URL}/stories/images`,
+      `${process.env.NEXT_PUBLIC_VERCEL_URL}/api/stories/images`,
       {
         method: "POST",
         headers: {
@@ -198,18 +198,21 @@ const Map = ({ stories }: { stories: StoryProps[] }) => {
       .replace(/,/g, "<p></p>")
       .replace(/&&]/g, ",");
 
-    const res = await fetch(`${process.env.NEXT_PUBLIC_VERCEL_URL}/stories`, {
-      method: "POST",
-      body: JSON.stringify({
-        id: randomId,
-        title: "Title",
-        content: htmlString,
-        imageUrl: generatedImage,
-        longitude: tempMarker?.longitude,
-        latitude: tempMarker?.latitude,
-        published: false,
-      }),
-    });
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_VERCEL_URL}/api/stories`,
+      {
+        method: "POST",
+        body: JSON.stringify({
+          id: randomId,
+          title: "Title",
+          content: htmlString,
+          imageUrl: generatedImage,
+          longitude: tempMarker?.longitude,
+          latitude: tempMarker?.latitude,
+          published: false,
+        }),
+      }
+    );
 
     if (!res.ok) {
       throw new Error("Failed to save");
@@ -242,7 +245,7 @@ const Map = ({ stories }: { stories: StoryProps[] }) => {
     } else {
       if (assistance === "helpStart") {
         const res = await fetch(
-          `${process.env.NEXT_PUBLIC_VERCEL_URL}/ai/story-start`,
+          `${process.env.NEXT_PUBLIC_VERCEL_URL}/api/ai/story-start`,
           {
             method: "POST",
             headers: {
@@ -263,7 +266,7 @@ const Map = ({ stories }: { stories: StoryProps[] }) => {
         handleUpload(start);
       } else {
         const res = await fetch(
-          `${process.env.NEXT_PUBLIC_VERCEL_URL}/ai/story`,
+          `${process.env.NEXT_PUBLIC_VERCEL_URL}/api/ai/story`,
           {
             method: "POST",
             headers: {
@@ -295,7 +298,7 @@ const Map = ({ stories }: { stories: StoryProps[] }) => {
     setIsGeneratingHelp(true);
 
     const res = await fetch(
-      `${process.env.NEXT_PUBLIC_VERCEL_URL}/ai/direction`,
+      `${process.env.NEXT_PUBLIC_VERCEL_URL}/api/ai/direction`,
       {
         method: "POST",
         headers: {
@@ -324,12 +327,15 @@ const Map = ({ stories }: { stories: StoryProps[] }) => {
 
     setIsGeneratingHelp(true);
 
-    const res = await fetch(`${process.env.NEXT_PUBLIC_VERCEL_URL}/ai/idea`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_VERCEL_URL}/api/ai/idea`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
 
     if (!res.ok) {
       throw new Error("Failed fetching data");

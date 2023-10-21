@@ -37,7 +37,7 @@ const CommentForm = ({ id }: { id: string }) => {
     }
 
     const res = await fetch(
-      `${process.env.NEXT_PUBLIC_VERCEL_URL}/stories/comments?id=${id}`,
+      `${process.env.NEXT_PUBLIC_VERCEL_URL}/api/stories/comments?id=${id}`,
       {
         method: "POST",
         headers: { "Content-Type": "application/json" },

@@ -16,7 +16,7 @@ const RatingSection = ({ id, imageUrl }: { id: string; imageUrl: string }) => {
   useEffect(() => {
     const getRating = async () => {
       const res = await fetch(
-        `${process.env.NEXT_PUBLIC_VERCEL_URL}/stories/ratings?id=${id}`,
+        `${process.env.NEXT_PUBLIC_VERCEL_URL}/api/stories/ratings?id=${id}`,
         {
           method: "GET",
           headers: { "Content-Type": "application/json" },
@@ -59,7 +59,7 @@ const RatingSection = ({ id, imageUrl }: { id: string; imageUrl: string }) => {
   const rateStory = async (rating: number) => {
     if (userRating.ratingValue !== 0) {
       const res = await fetch(
-        `${process.env.NEXT_PUBLIC_VERCEL_URL}/stories/ratings?id=${userRating.ratingId}`,
+        `${process.env.NEXT_PUBLIC_VERCEL_URL}/api/stories/ratings?id=${userRating.ratingId}`,
         {
           method: "PUT",
           headers: { "Content-Type": "application/json" },
@@ -78,7 +78,7 @@ const RatingSection = ({ id, imageUrl }: { id: string; imageUrl: string }) => {
       });
     } else {
       const res = await fetch(
-        `${process.env.NEXT_PUBLIC_VERCEL_URL}/stories/ratings?id=${id}`,
+        `${process.env.NEXT_PUBLIC_VERCEL_URL}/api/stories/ratings?id=${id}`,
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
