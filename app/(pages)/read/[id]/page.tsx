@@ -25,7 +25,7 @@ import AnimatedLink from "@/app/components/buttons/AnimatedLink";
 //   return stories.map((story: StoryProps) => ({
 //     id: story.id,
 //   }));
-}
+// }
 
 // Fetches props for a single story
 async function getStory(id: string) {
