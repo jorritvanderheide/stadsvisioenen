@@ -414,7 +414,7 @@ const Map = ({ stories }: { stories: StoryProps[] }) => {
           variants={creationVariants}
           initial="hidden"
           animate={isCreating ? "visible" : "hidden"}>
-          <div className="relative flex w-full max-w-prose flex-col items-center gap-[5em]">
+          <div className="relative flex w-full flex-col items-center gap-[5em]">
             {/* Close icon */}
             <div className="absolute left-0 top-0">
               <AnimatedLink className="absolute">
@@ -424,175 +424,178 @@ const Map = ({ stories }: { stories: StoryProps[] }) => {
               </AnimatedLink>
             </div>
 
-            {/* Info text */}
-            <div className="mt-[7.5vh]">
-              <p className="text-h3 font-semibold">
-                With the help of artificial intelligence, you can help us create
-                a more diverse and inclusive dialogue about urban development.
-              </p>
-            </div>
-
-            <div
-              className={`flex w-full max-w-prose flex-col items-center gap-[2.5em] ${
-                topic !== "" ? "gap-[5em]" : "gap-[2.5em]"
-              }`}>
-              {/* Topic bar */}
-              <div className="flex flex-col items-center gap-[2.5em]">
-                <h2 className="text-h2 font-bold">
-                  Do you already have a topic in mind?
-                </h2>
-                <div className="flex justify-between gap-1 rounded-md bg-gray text-[3vw] md:text-body">
-                  <Button
-                    noY
-                    onClick={() => setTopic("hasTopic")}
-                    className={`${
-                      topic === "hasTopic"
-                        ? "bg-gray-dark text-white"
-                        : "bg-gray"
-                    }`}>
-                    Yes I do!
-                  </Button>
-                  <Button
-                    noY
-                    onClick={() => setTopic("hasDirection")}
-                    className={`${
-                      topic === "hasDirection"
-                        ? "bg-gray-dark text-white"
-                        : "bg-gray"
-                    }`}>
-                    Help me choose
-                  </Button>
-                  <Button
-                    noY
-                    onClick={() => setTopic("needsHelp")}
-                    className={`${
-                      topic === "needsHelp"
-                        ? "bg-gray-dark text-white"
-                        : "bg-gray"
-                    }`}>
-                    Choose for me
-                  </Button>
-                </div>
+            <div className="flex w-full flex-col items-center justify-center gap-[5em]">
+              {/* Info text */}
+              <div className="mt-[7.5vh] max-w-prose">
+                <p className="text-h3 font-semibold">
+                  With the help of artificial intelligence, you can help us
+                  create a more diverse and inclusive dialogue about urban
+                  development.
+                </p>
               </div>
 
-              {/* Topic pane */}
-              <div className="-mt-[1em] w-full">
-                {topic === "hasTopic" ? (
-                  <div className="mb-[2.5em] flex w-full flex-col items-center justify-center gap-[2.5em]">
-                    <div className="flex w-full items-center justify-between gap-[1em]">
-                      <input
-                        className="w-full rounded-md border border-gray p-[1em] focus:border-gray-dark"
-                        value={directionValue}
-                        onChange={(e) => setDirectionValue(e.target.value)}
-                        placeholder="Fill in a topic for your vision for the future"
-                        name="direction"
-                      />
-                    </div>
+              <div
+                className={`flex w-full max-w-prose flex-col items-center gap-[2.5em] ${
+                  topic !== "" ? "gap-[5em]" : "gap-[2.5em]"
+                }`}>
+                {/* Topic bar */}
+                <div className="flex flex-col items-center gap-[2.5em]">
+                  <h2 className="text-h2 font-bold">
+                    Do you already have a topic in mind?
+                  </h2>
+                  <div className="flex justify-between gap-1 rounded-md bg-gray text-[min(3vw,0.9rem)] md:text-body">
+                    <Button
+                      noY
+                      onClick={() => setTopic("hasTopic")}
+                      className={`${
+                        topic === "hasTopic"
+                          ? "bg-gray-dark text-white"
+                          : "bg-gray"
+                      }`}>
+                      Yes I do!
+                    </Button>
+                    <Button
+                      noY
+                      onClick={() => setTopic("hasDirection")}
+                      className={`${
+                        topic === "hasDirection"
+                          ? "bg-gray-dark text-white"
+                          : "bg-gray"
+                      }`}>
+                      Help me choose
+                    </Button>
+                    <Button
+                      noY
+                      onClick={() => setTopic("needsHelp")}
+                      className={`${
+                        topic === "needsHelp"
+                          ? "bg-gray-dark text-white"
+                          : "bg-gray"
+                      }`}>
+                      Choose for me
+                    </Button>
                   </div>
-                ) : // Has direction
-                topic === "hasDirection" ? (
-                  <div className="mb-[2.5em] flex w-full flex-col items-center gap-[2.5em]">
-                    <div className="flex w-full items-center justify-between gap-[1em]">
-                      <input
-                        className="w-full rounded-md border border-gray p-[1em] focus:!border-gray-dark"
-                        value={direction}
-                        onChange={(e) => setDirection(e.target.value)}
-                        placeholder="Describe a direction for your vision for the future"
-                        name="direction"
-                      />
-                      <Button
-                        className="flex h-[3em] w-[3em] items-center justify-center !rounded-full bg-gray-dark text-white"
-                        onClick={(e) => handleDirection(e)}>
-                        <span
-                          className={`material-symbols-rounded ${
-                            isGeneratingHelp && "animate-spin"
-                          }`}>
-                          {isGeneratingHelp ? "autorenew" : "send"}
-                        </span>
-                      </Button>
-                    </div>
-                    {directionValue !== "" && (
-                      <div className="mb-[2.5em] flex w-full flex-col items-center rounded-md bg-gray p-[2em]">
-                        {directionValue}
+                </div>
+
+                {/* Topic pane */}
+                <div className="-mt-[1em] w-full">
+                  {topic === "hasTopic" ? (
+                    <div className="mb-[2.5em] flex w-full flex-col items-center justify-center gap-[2.5em]">
+                      <div className="flex w-full items-center justify-between gap-[1em]">
+                        <input
+                          className="w-full rounded-md border border-gray p-[1em] focus:border-gray-dark"
+                          value={directionValue}
+                          onChange={(e) => setDirectionValue(e.target.value)}
+                          placeholder="Fill in a topic for your vision for the future"
+                          name="direction"
+                        />
                       </div>
+                    </div>
+                  ) : // Has direction
+                  topic === "hasDirection" ? (
+                    <div className="mb-[2.5em] flex w-full flex-col items-center gap-[2.5em]">
+                      <div className="flex w-full items-center justify-between gap-[1em]">
+                        <input
+                          className="w-full rounded-md border border-gray p-[1em] focus:!border-gray-dark"
+                          value={direction}
+                          onChange={(e) => setDirection(e.target.value)}
+                          placeholder="Describe a direction for your vision for the future"
+                          name="direction"
+                        />
+                        <Button
+                          className="flex h-[3em] w-[3em] items-center justify-center !rounded-full bg-gray-dark text-white"
+                          onClick={(e) => handleDirection(e)}>
+                          <span
+                            className={`material-symbols-rounded ${
+                              isGeneratingHelp && "animate-spin"
+                            }`}>
+                            {isGeneratingHelp ? "autorenew" : "send"}
+                          </span>
+                        </Button>
+                      </div>
+                      {directionValue !== "" && (
+                        <div className="mb-[2.5em] flex w-full flex-col items-center rounded-md bg-gray p-[2em]">
+                          {directionValue}
+                        </div>
+                      )}
+                    </div>
+                  ) : // Needs help
+                  topic === "needsHelp" ? (
+                    <div className="relative mb-[2.5em] flex w-full justify-center rounded-md bg-gray p-[2em]">
+                      <p id="need-help" className="text-body">
+                        {directionValue !== "" ? (
+                          directionValue
+                        ) : (
+                          <em>Start generating an idea</em>
+                        )}
+                      </p>
+                      <div className="absolute bottom-0 right-0 -m-[1em]">
+                        <Button
+                          className=" flex h-[3em] w-[3em] items-center justify-center !rounded-full bg-gray-dark text-white"
+                          onClick={(e) => handleNeedHelp(e)}>
+                          <span
+                            className={`material-symbols-rounded ${
+                              isGeneratingHelp && "animate-spin"
+                            }`}>
+                            autorenew
+                          </span>
+                        </Button>
+                      </div>
+                    </div>
+                  ) : null}
+                </div>
+
+                {/* Assistance bar */}
+                <div className="flex flex-col items-center gap-[2.5em] text-[min(3vw,0.9rem)] md:text-body">
+                  <h2 className="text-h2 font-bold">
+                    Do you want me to help you write?
+                  </h2>
+                  <div className="flex justify-between gap-1 rounded-md bg-gray">
+                    <Button
+                      noY
+                      onClick={() => setAssistance("noAssistance")}
+                      className={`${
+                        assistance === "noAssistance"
+                          ? "bg-gray-dark text-white"
+                          : "bg-gray"
+                      }`}>
+                      No, robot
+                    </Button>
+                    <Button
+                      noY
+                      onClick={() => setAssistance("helpStart")}
+                      className={`${
+                        assistance === "helpStart"
+                          ? "bg-gray-dark text-white"
+                          : "bg-gray"
+                      }`}>
+                      Help me get started
+                    </Button>
+                    <Button
+                      noY
+                      onClick={() => setAssistance("helpWrite")}
+                      className={`${
+                        assistance === "helpWrite"
+                          ? "bg-gray-dark text-white"
+                          : "bg-gray"
+                      }`}>
+                      Can you write it?
+                    </Button>
+                  </div>
+                </div>
+
+                {/* Generate button */}
+                <Button onClick={(e) => handleStoryForm(e)}>
+                  <div className="flex items-center gap-1">
+                    Start writing
+                    {isGenerating && (
+                      <span className="material-symbols-rounded animate-spin">
+                        autorenew
+                      </span>
                     )}
                   </div>
-                ) : // Needs help
-                topic === "needsHelp" ? (
-                  <div className="relative mb-[2.5em] flex w-full justify-center rounded-md bg-gray p-[2em]">
-                    <p id="need-help" className="text-body">
-                      {directionValue !== "" ? (
-                        directionValue
-                      ) : (
-                        <em>Start generating an idea</em>
-                      )}
-                    </p>
-                    <div className="absolute bottom-0 right-0 -m-[1em]">
-                      <Button
-                        className=" flex h-[3em] w-[3em] items-center justify-center !rounded-full bg-gray-dark text-white"
-                        onClick={(e) => handleNeedHelp(e)}>
-                        <span
-                          className={`material-symbols-rounded ${
-                            isGeneratingHelp && "animate-spin"
-                          }`}>
-                          autorenew
-                        </span>
-                      </Button>
-                    </div>
-                  </div>
-                ) : null}
+                </Button>
               </div>
-
-              {/* Assistance bar */}
-              <div className="flex flex-col items-center gap-[2.5em] text-[3vw] md:text-body">
-                <h2 className="text-h2 font-bold">
-                  Do you want me to help you write?
-                </h2>
-                <div className="flex justify-between gap-1 rounded-md bg-gray">
-                  <Button
-                    noY
-                    onClick={() => setAssistance("noAssistance")}
-                    className={`${
-                      assistance === "noAssistance"
-                        ? "bg-gray-dark text-white"
-                        : "bg-gray"
-                    }`}>
-                    No, robot
-                  </Button>
-                  <Button
-                    noY
-                    onClick={() => setAssistance("helpStart")}
-                    className={`${
-                      assistance === "helpStart"
-                        ? "bg-gray-dark text-white"
-                        : "bg-gray"
-                    }`}>
-                    Help me get started
-                  </Button>
-                  <Button
-                    noY
-                    onClick={() => setAssistance("helpWrite")}
-                    className={`${
-                      assistance === "helpWrite"
-                        ? "bg-gray-dark text-white"
-                        : "bg-gray"
-                    }`}>
-                    Can you write it?
-                  </Button>
-                </div>
-              </div>
-
-              {/* Generate button */}
-              <Button onClick={(e) => handleStoryForm(e)}>
-                <div className="flex items-center gap-1">
-                  Start writing
-                  {isGenerating && (
-                    <span className="material-symbols-rounded animate-spin">
-                      autorenew
-                    </span>
-                  )}
-                </div>
-              </Button>
             </div>
           </div>
         </motion.aside>

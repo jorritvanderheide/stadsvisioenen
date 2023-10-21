@@ -9,23 +9,23 @@ import Image from "next/image";
 import Link from "next/link";
 import AnimatedLink from "@/app/components/buttons/AnimatedLink";
 
-/**
- * Generates static paths for all stories
- * @returns {any}
- */
-export async function generateStaticParams(): Promise<any> {
-  const stories = await fetch(
-    `${process.env.NEXT_PUBLIC_VERCEL_URL}/api/stories`,
-    {
-      method: "GET",
-      headers: { "Content-Type": "application/json" },
-    }
-  ).then((res) => res.json());
+// /**
+//  * Generates static paths for all stories
+//  * @returns {any}
+//  */
+// export async function generateStaticParams(): Promise<any> {
+//   const stories = await fetch(
+//     `${process.env.NEXT_PUBLIC_VERCEL_URL}/api/stories`,
+//     {
+//       method: "GET",
+//       headers: { "Content-Type": "application/json" },
+//     }
+//   ).then((res) => res.json());
 
-  return stories.map((story: StoryProps) => ({
-    id: story.id,
-  }));
-}
+//   return stories.map((story: StoryProps) => ({
+//     id: story.id,
+//   }));
+// }
 
 // Fetches props for a single story
 async function getStory(id: string) {
