@@ -25,7 +25,7 @@ const CommentControls: React.FC<{ id: string }> = ({ id }) => {
 
     if (confirm) {
       const res = await fetch(
-        `${process.env.NEXT_PUBLIC_FETCH_URL}/stories/comments?id=${id}`,
+        `${process.env.NEXT_PUBLIC_VERCEL_URL}/stories/comments?id=${id}`,
         {
           method: "DELETE",
           headers: { "Content-Type": "application/json" },

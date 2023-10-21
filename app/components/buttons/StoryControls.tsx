@@ -27,7 +27,7 @@ const StoryControls: React.FC<{ id: string; story: StoryProps }> = ({
 
     if (confirm) {
       const res = await fetch(
-        `${process.env.NEXT_PUBLIC_FETCH_URL}/stories?id=${id}`,
+        `${process.env.NEXT_PUBLIC_VERCEL_URL}/stories?id=${id}`,
         {
           method: "DELETE",
           headers: { "Content-Type": "application/json" },

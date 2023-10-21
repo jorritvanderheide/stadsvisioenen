@@ -40,7 +40,7 @@ const Editor: React.FC = () => {
     // Fetches props for editing a pre-existing story
     const getStory = async () => {
       const res = await fetch(
-        `${process.env.NEXT_PUBLIC_FETCH_URL}/stories?id=${id}`,
+        `${process.env.NEXT_PUBLIC_VERCEL_URL}/stories?id=${id}`,
         {
           method: "GET",
           headers: { "Content-Type": "application/json" },
@@ -79,7 +79,7 @@ const Editor: React.FC = () => {
   // Generate image description from story content
   const getDescription = async (content: string) => {
     const res = await fetch(
-      `${process.env.NEXT_PUBLIC_FETCH_URL}/stories/images/descriptions`,
+      `${process.env.NEXT_PUBLIC_VERCEL_URL}/stories/images/descriptions`,
       {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -135,7 +135,7 @@ const Editor: React.FC = () => {
     const description = await getDescription(cleanString);
 
     const res = await fetch(
-      `${process.env.NEXT_PUBLIC_FETCH_URL}/stories/images`,
+      `${process.env.NEXT_PUBLIC_VERCEL_URL}/stories/images`,
       {
         method: "POST",
         headers: {
@@ -169,7 +169,7 @@ const Editor: React.FC = () => {
       return;
     }
 
-    const res = await fetch(`${process.env.NEXT_PUBLIC_FETCH_URL}/stories`, {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_VERCEL_URL}/stories`, {
       method: "POST",
       body: JSON.stringify({
         id: randomId,
@@ -198,7 +198,7 @@ const Editor: React.FC = () => {
       throw new Error("Profanity detected");
     }
 
-    const res = await fetch(`${process.env.NEXT_PUBLIC_FETCH_URL}/stories`, {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_VERCEL_URL}/stories`, {
       method: "PUT",
       body: JSON.stringify({
         id: story!.id,

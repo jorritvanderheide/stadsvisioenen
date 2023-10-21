@@ -16,7 +16,7 @@ const RatingSection = ({ id, imageUrl }: { id: string; imageUrl: string }) => {
   useEffect(() => {
     const getRating = async () => {
       const res = await fetch(
-        `${process.env.NEXT_PUBLIC_FETCH_URL}/stories/ratings?id=${id}`,
+        `${process.env.NEXT_PUBLIC_VERCEL_URL}/stories/ratings?id=${id}`,
         {
           method: "GET",
           headers: { "Content-Type": "application/json" },
@@ -59,7 +59,7 @@ const RatingSection = ({ id, imageUrl }: { id: string; imageUrl: string }) => {
   const rateStory = async (rating: number) => {
     if (userRating.ratingValue !== 0) {
       const res = await fetch(
-        `${process.env.NEXT_PUBLIC_FETCH_URL}/stories/ratings?id=${userRating.ratingId}`,
+        `${process.env.NEXT_PUBLIC_VERCEL_URL}/stories/ratings?id=${userRating.ratingId}`,
         {
           method: "PUT",
           headers: { "Content-Type": "application/json" },
@@ -78,7 +78,7 @@ const RatingSection = ({ id, imageUrl }: { id: string; imageUrl: string }) => {
       });
     } else {
       const res = await fetch(
-        `${process.env.NEXT_PUBLIC_FETCH_URL}/stories/ratings?id=${id}`,
+        `${process.env.NEXT_PUBLIC_VERCEL_URL}/stories/ratings?id=${id}`,
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -101,8 +101,8 @@ const RatingSection = ({ id, imageUrl }: { id: string; imageUrl: string }) => {
   return (
     <>
       <section id="rating">
-        <div className="w-full flex justify-center items-center p-[7.5vh] bg-white border-t-[1px] border-gray">
-          <div className="flex flex-col gap-[2.5em] items-center">
+        <div className="flex w-full items-center justify-center border-t-[1px] border-gray bg-white p-[7.5vh]">
+          <div className="flex flex-col items-center gap-[2.5em]">
             <h2 className="text-h2 font-bold">Rate this story</h2>
             <div className="flex">
               {[...Array(5)].map((e, index: number) => {

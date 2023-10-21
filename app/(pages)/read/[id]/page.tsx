@@ -14,7 +14,7 @@ import AnimatedLink from "@/app/components/buttons/AnimatedLink";
  * @returns {any}
  */
 export async function generateStaticParams() {
-  const stories = await fetch(`${process.env.NEXT_PUBLIC_FETCH_URL}/stories`, {
+  const stories = await fetch(`${process.env.NEXT_PUBLIC_VERCEL_URL}/stories`, {
     method: "GET",
     headers: { "Content-Type": "application/json" },
   }).then((res) => res.json());
@@ -27,7 +27,7 @@ export async function generateStaticParams() {
 // Fetches props for a single story
 async function getStory(id: string) {
   const res = await fetch(
-    `${process.env.NEXT_PUBLIC_FETCH_URL}/stories?id=${id}`,
+    `${process.env.NEXT_PUBLIC_VERCEL_URL}/stories?id=${id}`,
     {
       method: "GET",
       headers: { "Content-Type": "application/json" },
