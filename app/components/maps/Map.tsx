@@ -5,7 +5,7 @@
 import { useMemo, useState, useRef, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
-import { AnimatePresence, delay, motion } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
 import { useLoadScript, GoogleMap, MarkerF } from "@react-google-maps/api";
 import { StoryProps, TempMarkerProps } from "@/app/types/global.t";
 import Button from "@/app/components/buttons/Button";
@@ -14,6 +14,11 @@ import { profanity } from "@2toad/profanity";
 import { createId } from "@paralleldrive/cuid2";
 import { decode } from "base64-arraybuffer";
 import { supabase } from "@/app/lib/supabase/supabase";
+
+import OpenAI from "openai";
+import { OpenAIStream, StreamingTextResponse } from "ai";
+
+export const runtime = "edge";
 
 const Map = ({ stories }: { stories: StoryProps[] }) => {
   const ref = useRef(null);
@@ -35,6 +40,12 @@ const Map = ({ stories }: { stories: StoryProps[] }) => {
   const [directionValue, setDirectionValue] = useState<string>("");
   const [isGeneratingHelp, setIsGeneratingHelp] = useState(false);
 
+  // OpenAI
+  const openai = new OpenAI({
+    apiKey: process.env.NEXT_PUBLIC_OPENAI_API_KEY,
+    dangerouslyAllowBrowser: true,
+  });
+
   // Set the map options
   const mapOptions = useMemo(
     () => ({
@@ -54,7 +65,7 @@ const Map = ({ stories }: { stories: StoryProps[] }) => {
 
   // Create a new story
   const newStory = async (e: any) => {
-    if (!session) return;
+    // if (!session) return;
 
     // Set the temp marker
     setTempMarker({
@@ -98,20 +109,25 @@ const Map = ({ stories }: { stories: StoryProps[] }) => {
 
   // Generate image description from story content
   const getDescription = async (content: string) => {
-    const res = await fetch(
-      `${process.env.NEXT_PUBLIC_FETCH_URL}/api/stories/images/descriptions`,
-      {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ prompt: content }),
-      }
-    );
+    const response = await openai.chat.completions.create({
+      model: "gpt-4",
+      stream: true,
+      messages: [
+        {
+          role: "user",
+          content: `Write a short alt-text style description for an image that could be the cover of this story: ${content}.`,
+        },
+      ],
+    });
 
-    if (!res.ok) {
-      throw new Error("Failed to fetch data");
-    }
+    // Convert the response into a friendly text-stream
+    const stream = OpenAIStream(response);
 
-    return res.json();
+    const textResponse = new StreamingTextResponse(stream);
+
+    const description = await textResponse.text();
+
+    return description;
   };
 
   // Upload image to supabase
@@ -140,10 +156,6 @@ const Map = ({ stories }: { stories: StoryProps[] }) => {
 
   // Generate image from description
   const generateImage = async (generatedStory: string) => {
-    if (isGenerating) {
-      return;
-    }
-
     const description = await getDescription(generatedStory);
 
     const res = await fetch(
@@ -214,10 +226,6 @@ const Map = ({ stories }: { stories: StoryProps[] }) => {
       }
     );
 
-    if (!res.ok) {
-      throw new Error("Failed to save");
-    }
-
     setIsGenerating(false);
 
     router.push(`/write?id=${randomId}`);
@@ -244,45 +252,56 @@ const Map = ({ stories }: { stories: StoryProps[] }) => {
       );
     } else {
       if (assistance === "helpStart") {
-        const res = await fetch(
-          `${process.env.NEXT_PUBLIC_FETCH_URL}/api/ai/story-start`,
-          {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
+        const response = await openai.chat.completions.create({
+          model: "gpt-4",
+          stream: true,
+          max_tokens: 1000,
+          messages: [
+            {
+              role: "user",
+              content: `Write a beginning of a story based on these criteria:
+              Extremely provocative and immersive.
+              About improvement to the build environment or city for the future.
+              The story should be about ${topic}.
+              Make it probable, and not too futuristic.
+              Leave the end open for others to continue, so keep it short.
+              `,
             },
-            body: JSON.stringify({
-              topic: directionValue,
-            }),
-          }
-        );
+          ],
+        });
 
-        if (!res.ok) {
-          throw new Error("Failed fetching data");
-        }
+        // Convert the response into a friendly text-stream
+        const stream = OpenAIStream(response);
 
-        const start = await res.json();
+        const textResponse = new StreamingTextResponse(stream);
+
+        const start = await textResponse.text();
 
         handleUpload(start);
       } else {
-        const res = await fetch(
-          `${process.env.NEXT_PUBLIC_FETCH_URL}/api/ai/story`,
-          {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
+        const response = await openai.chat.completions.create({
+          model: "gpt-4",
+          stream: true,
+          max_tokens: 500,
+          messages: [
+            {
+              role: "user",
+              content: `Write a beginning of a story based on these criteria:
+              Extremely provocative and immersive.
+              About improvement to the build environment or city for the future.
+              The story should be about ${directionValue}.
+              Make it probable, and not too futuristic. 
+              `,
             },
-            body: JSON.stringify({
-              topic: directionValue,
-            }),
-          }
-        );
+          ],
+        });
 
-        if (!res.ok) {
-          throw new Error("Failed fetching data");
-        }
+        // Convert the response into a friendly text-stream
+        const stream = OpenAIStream(response);
 
-        const story = await res.json();
+        const textResponse = new StreamingTextResponse(stream);
+
+        const story = await textResponse.text();
 
         handleUpload(story);
       }
@@ -297,22 +316,28 @@ const Map = ({ stories }: { stories: StoryProps[] }) => {
 
     setIsGeneratingHelp(true);
 
-    const res = await fetch(
-      `${process.env.NEXT_PUBLIC_FETCH_URL}/api/ai/direction`,
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
+    const response = await openai.chat.completions.create({
+      model: "gpt-4",
+      stream: true,
+      max_tokens: 250,
+      messages: [
+        {
+          role: "user",
+          content: `Write a one-sentence idea to for a short story based on these criteria:
+          It should be speculative fiction, but not about technology.
+          It should be about ${direction}.
+          It is meant to be a fun way to discuss the possbile future of the city in the social domain.
+          `,
         },
-        body: JSON.stringify({ prompt: direction }),
-      }
-    );
+      ],
+    });
 
-    if (!res.ok) {
-      throw new Error("Failed fetching data");
-    }
+    // Convert the response into a friendly text-stream
+    const stream = OpenAIStream(response);
 
-    const directionValue = await res.json();
+    const textResponse = new StreamingTextResponse(stream);
+
+    const directionValue = await textResponse.text();
 
     setDirectionValue(directionValue);
 
@@ -327,21 +352,30 @@ const Map = ({ stories }: { stories: StoryProps[] }) => {
 
     setIsGeneratingHelp(true);
 
-    const res = await fetch(
-      `${process.env.NEXT_PUBLIC_FETCH_URL}/api/ai/idea`,
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
+    const response = await openai.chat.completions.create({
+      model: "gpt-4",
+      stream: true,
+      max_tokens: 250,
+      messages: [
+        {
+          role: "user",
+          content: `Write a one-sentence idea to for a short story based on these criteria:
+          It should be speculative fiction, but not about technology.
+          It should be about one of the following topics: Nutrition and Basic Medical Care, Water and Sanitation, Shelter, Personal Security, Access to Basic Knowledge, Access to Information and 
+          Communication, Health and Wellness, Environmental Quality, Personal Rights, Personal Freedom and Choice, Tolerance and Inclusion, Access to Advanced Education.
+          Don't mention these domains specifically, but situate the story in an everyday situtation in one of them.
+          It is meant to be a fun way to discuss the possbile future of the city in the social domain..
+          `,
         },
-      }
-    );
+      ],
+    });
 
-    if (!res.ok) {
-      throw new Error("Failed fetching data");
-    }
+    // Convert the response into a friendly text-stream
+    const stream = OpenAIStream(response);
 
-    const idea = await res.json();
+    const textResponse = new StreamingTextResponse(stream);
+
+    const idea = await textResponse.text();
 
     setDirectionValue(idea);
 

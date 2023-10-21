@@ -5,7 +5,6 @@
 // Imports
 import React, { useEffect, useState } from "react";
 import Image from "next/image";
-import Link from "next/link";
 import dynamic from "next/dynamic";
 import { useRouter, useSearchParams } from "next/navigation";
 import { profanity } from "@2toad/profanity";
@@ -18,6 +17,11 @@ import Button from "@/app/components/buttons/Button";
 import AnimatedLink from "@/app/components/buttons/AnimatedLink";
 
 const ReactQuill = dynamic(() => import("react-quill"), { ssr: false });
+
+import OpenAI from "openai";
+import { OpenAIStream, StreamingTextResponse } from "ai";
+
+export const runtime = "edge";
 
 // Export default
 const Editor: React.FC = () => {
@@ -35,12 +39,17 @@ const Editor: React.FC = () => {
   const [imageUrl, setImageUrl] = useState("/images/placeholder.svg");
   const [isGenerating, setIsGenerating] = useState(false);
 
+  const openai = new OpenAI({
+    apiKey: process.env.NEXT_PUBLIC_OPENAI_API_KEY,
+    dangerouslyAllowBrowser: true,
+  });
+
   // Fetch story if editing existing
   useEffect(() => {
     // Fetches props for editing a pre-existing story
     const getStory = async () => {
       const res = await fetch(
-        `${process.env.NEXT_PUBLIC_FETCH_URL}/api/stories?id=${id}`,
+        `${process.env.NEXT_PUBLIC_FETCH_URL}/api/stories/id?id=${id}`,
         {
           method: "GET",
           headers: { "Content-Type": "application/json" },
@@ -78,20 +87,25 @@ const Editor: React.FC = () => {
 
   // Generate image description from story content
   const getDescription = async (content: string) => {
-    const res = await fetch(
-      `${process.env.NEXT_PUBLIC_FETCH_URL}/api/stories/images/descriptions`,
-      {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ prompt: content }),
-      }
-    );
+    const response = await openai.chat.completions.create({
+      model: "gpt-4",
+      stream: true,
+      messages: [
+        {
+          role: "user",
+          content: `Write a short alt-text style description for an image that could be the cover of this story: ${content}.`,
+        },
+      ],
+    });
 
-    if (!res.ok) {
-      throw new Error("Failed to fetch data");
-    }
+    // Convert the response into a friendly text-stream
+    const stream = OpenAIStream(response);
 
-    return res.json();
+    const textResponse = new StreamingTextResponse(stream);
+
+    const description = await textResponse.text();
+
+    return description;
   };
 
   // Upload image to supabase

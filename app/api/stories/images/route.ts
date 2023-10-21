@@ -12,12 +12,12 @@ export const POST = async (request: Request): Promise<Response> => {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${process.env.OPENAI_API_KEY}`,
+        Authorization: `Bearer ${process.env.NEXT_PUBLIC_OPENAI_API_KEY}`,
       },
       body: JSON.stringify({
         prompt: `A digital illustration of ${prompt}, 4k, detailed, ghibli.`,
         n: 1,
-        size: "1024x1024",
+        size: "512x512",
         response_format: "b64_json",
       }),
     });
