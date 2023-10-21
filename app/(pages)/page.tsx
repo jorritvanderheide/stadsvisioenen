@@ -23,17 +23,17 @@ async function getStories() {
 
 // Export default
 const Home: NextPage = () => {
-  // const [stories, setStories] = useState<StoryProps[]>();
+  const [stories, setStories] = useState<StoryProps[]>();
 
-  // useEffect(() => {
-  //   getStories().then((data) => setStories(data));
-  // }, []);
+  useEffect(() => {
+    getStories().then((data) => setStories(data));
+  }, []);
 
   return (
     <>
       <main className="h-[100svh] w-full overflow-hidden">
         <Header />
-        {/* <Map stories={stories!} /> */}
+        <Map stories={stories!} />
       </main>
     </>
   );
