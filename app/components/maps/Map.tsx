@@ -235,9 +235,6 @@ const Map = ({ stories }: { stories: StoryProps[] }) => {
   const handleStoryForm = async (e: any) => {
     e.preventDefault();
 
-    if (!session) return;
-    if (isGenerating) return;
-
     if (topic === "" || assistance === "" || directionValue === "") {
       alert(
         "Please select a topic and assistance option before creating a story"
