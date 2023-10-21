@@ -15,7 +15,7 @@ import AnimatedLink from "@/app/components/buttons/AnimatedLink";
 //  */
 // export async function generateStaticParams(): Promise<any> {
 //   const stories = await fetch(
-//     `${process.env.NEXT_PUBLIC_VERCEL_URL}/api/stories`,
+//     `/api/stories`,
 //     {
 //       method: "GET",
 //       headers: { "Content-Type": "application/json" },
@@ -29,13 +29,10 @@ import AnimatedLink from "@/app/components/buttons/AnimatedLink";
 
 // Fetches props for a single story
 async function getStory(id: string) {
-  const res = await fetch(
-    `${process.env.NEXT_PUBLIC_VERCEL_URL}/api/stories?id=${id}`,
-    {
-      method: "GET",
-      headers: { "Content-Type": "application/json" },
-    }
-  );
+  const res = await fetch(`/api/stories?id=${id}`, {
+    method: "GET",
+    headers: { "Content-Type": "application/json" },
+  });
 
   if (!res.ok) {
     throw new Error("Failed to fetch data");

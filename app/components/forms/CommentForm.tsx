@@ -36,14 +36,11 @@ const CommentForm = ({ id }: { id: string }) => {
       return;
     }
 
-    const res = await fetch(
-      `${process.env.NEXT_PUBLIC_VERCEL_URL}/api/stories/comments?id=${id}`,
-      {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ content }),
-      }
-    );
+    const res = await fetch(`/api/stories/comments?id=${id}`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ content }),
+    });
     if (!res.ok) {
       throw new Error("Failed to fetch data");
     } else {

@@ -39,14 +39,11 @@ const Editor: React.FC = () => {
   useEffect(() => {
     // Fetches props for editing a pre-existing story
     const getStory = async () => {
-      const res = await fetch(
-        `${process.env.NEXT_PUBLIC_VERCEL_URL}/api/stories?id=${id}`,
-        {
-          method: "GET",
-          headers: { "Content-Type": "application/json" },
-          cache: "no-cache",
-        }
-      );
+      const res = await fetch(`/api/stories?id=${id}`, {
+        method: "GET",
+        headers: { "Content-Type": "application/json" },
+        cache: "no-cache",
+      });
 
       if (!res.ok) {
         throw new Error("Failed to fetch data");
@@ -78,14 +75,11 @@ const Editor: React.FC = () => {
 
   // Generate image description from story content
   const getDescription = async (content: string) => {
-    const res = await fetch(
-      `${process.env.NEXT_PUBLIC_VERCEL_URL}/api/stories/images/descriptions`,
-      {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ prompt: content }),
-      }
-    );
+    const res = await fetch(`/api/stories/images/descriptions`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ prompt: content }),
+    });
 
     if (!res.ok) {
       throw new Error("Failed to fetch data");
@@ -134,18 +128,15 @@ const Editor: React.FC = () => {
 
     const description = await getDescription(cleanString);
 
-    const res = await fetch(
-      `${process.env.NEXT_PUBLIC_VERCEL_URL}/api/stories/images`,
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          prompt: description,
-        }),
-      }
-    );
+    const res = await fetch(`/api/stories/images`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        prompt: description,
+      }),
+    });
 
     if (!res.ok) {
       throw new Error("Failed to generate image");
@@ -169,21 +160,18 @@ const Editor: React.FC = () => {
       return;
     }
 
-    const res = await fetch(
-      `${process.env.NEXT_PUBLIC_VERCEL_URL}/api/stories`,
-      {
-        method: "POST",
-        body: JSON.stringify({
-          id: randomId,
-          title: title,
-          content: content,
-          imageUrl: imageUrl,
-          longitude: longitude,
-          latitude: latitude,
-          published: true,
-        }),
-      }
-    );
+    const res = await fetch(`/api/stories`, {
+      method: "POST",
+      body: JSON.stringify({
+        id: randomId,
+        title: title,
+        content: content,
+        imageUrl: imageUrl,
+        longitude: longitude,
+        latitude: latitude,
+        published: true,
+      }),
+    });
 
     if (!res.ok) {
       throw new Error("Failed to save");
@@ -201,19 +189,16 @@ const Editor: React.FC = () => {
       throw new Error("Profanity detected");
     }
 
-    const res = await fetch(
-      `${process.env.NEXT_PUBLIC_VERCEL_URL}/api/stories`,
-      {
-        method: "PUT",
-        body: JSON.stringify({
-          id: story!.id,
-          title: title,
-          content: content,
-          imageUrl: imageUrl,
-          published: true,
-        }),
-      }
-    );
+    const res = await fetch(`/api/stories`, {
+      method: "PUT",
+      body: JSON.stringify({
+        id: story!.id,
+        title: title,
+        content: content,
+        imageUrl: imageUrl,
+        published: true,
+      }),
+    });
 
     if (!res.ok) {
       throw new Error("Failed to save");

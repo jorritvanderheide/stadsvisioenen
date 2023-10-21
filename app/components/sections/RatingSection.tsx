@@ -15,13 +15,10 @@ const RatingSection = ({ id, imageUrl }: { id: string; imageUrl: string }) => {
   // Fetches user rating
   useEffect(() => {
     const getRating = async () => {
-      const res = await fetch(
-        `${process.env.NEXT_PUBLIC_VERCEL_URL}/api/stories/ratings?id=${id}`,
-        {
-          method: "GET",
-          headers: { "Content-Type": "application/json" },
-        }
-      );
+      const res = await fetch(`/api/stories/ratings?id=${id}`, {
+        method: "GET",
+        headers: { "Content-Type": "application/json" },
+      });
 
       if (!res.ok) {
         throw new Error("Failed to fetch data");
@@ -59,7 +56,7 @@ const RatingSection = ({ id, imageUrl }: { id: string; imageUrl: string }) => {
   const rateStory = async (rating: number) => {
     if (userRating.ratingValue !== 0) {
       const res = await fetch(
-        `${process.env.NEXT_PUBLIC_VERCEL_URL}/api/stories/ratings?id=${userRating.ratingId}`,
+        `/api/stories/ratings?id=${userRating.ratingId}`,
         {
           method: "PUT",
           headers: { "Content-Type": "application/json" },
@@ -77,14 +74,11 @@ const RatingSection = ({ id, imageUrl }: { id: string; imageUrl: string }) => {
         ratingValue: data.rating,
       });
     } else {
-      const res = await fetch(
-        `${process.env.NEXT_PUBLIC_VERCEL_URL}/api/stories/ratings?id=${id}`,
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ rating }),
-        }
-      );
+      const res = await fetch(`/api/stories/ratings?id=${id}`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ rating }),
+      });
       if (!res.ok) {
         throw new Error("Failed to fetch data");
       }
