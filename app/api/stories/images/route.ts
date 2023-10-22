@@ -17,7 +17,7 @@ export const POST = async (request: Request): Promise<Response> => {
       body: JSON.stringify({
         prompt: `A digital illustration of ${prompt}, 4k, detailed, ghibli.`,
         n: 1,
-        size: "512x512",
+        size: "256x256",
         response_format: "b64_json",
       }),
     });
