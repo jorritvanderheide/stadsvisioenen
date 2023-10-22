@@ -28,6 +28,7 @@ const Map = ({ stories }: { stories: StoryProps[] }) => {
   const [tempMarker, setTempMarker] = useState<TempMarkerProps>();
   const { data: session } = useSession();
   const [logger, setLogger] = useState<string>("");
+  const [locName, setLocName] = useState("Eindhoven"); // Set the location name to Eindhoven by default
 
   // New Story Variables
   const [isCreating, setIsCreating] = useState(false);
@@ -67,6 +68,21 @@ const Map = ({ stories }: { stories: StoryProps[] }) => {
   // Create a new story
   const newStory = async (e: any) => {
     if (!session) return;
+
+    // Get the location name
+    const geocoder = new window.google.maps.Geocoder();
+    geocoder.geocode({ location: e.latLng }, function (results, status) {
+      if (status === window.google.maps.GeocoderStatus.OK) {
+        if (results![0]) {
+          let adrs_comp = results![0].address_components;
+          for (let i = 0; i < adrs_comp.length; i++) {
+            if (adrs_comp[i].types[0] === "locality") {
+              setLocName(adrs_comp[i].long_name);
+            }
+          }
+        }
+      }
+    });
 
     // Set the temp marker
     setTempMarker({
@@ -275,6 +291,7 @@ const Map = ({ stories }: { stories: StoryProps[] }) => {
               The story should be about ${topic}.
               Make it probable, and not too futuristic.
               Leave the end open for others to continue, so keep it short.
+              Make the story local to the context of the city of ${locName}.
               `,
             },
           ],
@@ -300,7 +317,8 @@ const Map = ({ stories }: { stories: StoryProps[] }) => {
               Extremely provocative and immersive.
               About improvement to the build environment or city for the future.
               The story should be about ${directionValue}.
-              Make it probable, and not too futuristic. 
+              Make it probable, and not too futuristic.
+              Make it local to the context of the city of ${locName}.
               `,
             },
           ],
