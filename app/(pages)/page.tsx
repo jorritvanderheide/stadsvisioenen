@@ -5,11 +5,14 @@ import { NextPage } from "next";
 
 // Fetch stories
 async function getStories() {
-  const res = await fetch(`${process.env.NEXT_PUBLIC_FETCH_URL}/api/stories`, {
-    method: "GET",
-    headers: { "Content-Type": "application/json" },
-    next: { revalidate: 0 },
-  });
+  const res: string = await fetch(
+    `${process.env.NEXT_PUBLIC_FETCH_URL}/api/stories`,
+    {
+      method: "GET",
+      headers: { "Content-Type": "application/json" },
+      next: { revalidate: 0 },
+    }
+  );
 
   if (!res.ok) {
     throw new Error("Failed to fetch stories");

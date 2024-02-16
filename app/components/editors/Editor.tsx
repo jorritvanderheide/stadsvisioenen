@@ -148,24 +148,20 @@ const Editor: React.FC = () => {
 
     const description = await getDescription(cleanString);
 
-    const res = await fetch(
-      `${process.env.NEXT_PUBLIC_FETCH_URL}/api/stories/images`,
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          prompt: description,
-        }),
-      }
+    const response = openai.images.generate({
+      (prompt = "a white siamese cat"),
+      (n = 1),
+      (size = "1024x1024")
     );
+    image_url = response["data"][0]["url"];
 
     if (!res.ok) {
       throw new Error("Failed to generate image");
     }
 
     const image = await res.json();
+
+    console.log(image);
 
     uploadImage(image);
   };
